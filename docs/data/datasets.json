@@ -1,0 +1,6 @@
+{
+  "_comment": "뷰어가 불러올 자료 목록. 변수를 추가하려면 같은 구조의 JSON을 docs/data/에 넣고 항목을 하나 추가한다. 이름·단위는 각 JSON의 meta.variable에서 읽는다.",
+  "datasets": [
+    { "id": "psl", "file": "data/viewer_data.json" }
+  ]
+}

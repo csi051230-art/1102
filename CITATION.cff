@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "이 뷰어나 자료를 인용할 때는 아래 정보를 사용해 주세요. (임시 자료 단계: 원본 결과로 교체되면 버전이 바뀝니다.)"
+title: "CMIP6 GCM sea-level pressure (psl) reproducibility over the Northwest Pacific — interactive viewer"
+type: software
+authors:
+  # TODO: 실제 이름으로 바꾸세요 (family-names / given-names)
+  - name: "csi051230-art"
+    affiliation: "Konkuk University, Department of Civil and Environmental Engineering"
+version: "1.0-provisional"
+date-released: "2026-11-01"
+repository-code: "https://github.com/csi051230-art/1102"
+url: "https://csi051230-art.github.io/1102/"
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - CMIP6
+  - ERA5
+  - sea-level pressure
+  - model evaluation
+  - Northwest Pacific
+  - Taylor diagram

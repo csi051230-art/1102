@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CMIP6 GCM 재현성 뷰어 — 북서태평양</title>
+  <meta name="description" content="CMIP6 GCM 21개의 북서태평양 기후 재현성 평가 결과 뷰어 (ERA5 비교)">
+  <script>
+    // 첫 화면 깜박임 방지: 저장된 테마를 먼저 적용
+    (function () {
+      var p = localStorage.getItem("theme") || "auto";
+      var d = p === "dark" || (p === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.theme = p;
+      document.documentElement.dataset.resolvedTheme = d ? "dark" : "light";
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="banner" role="note">
+    <b>임시 자료</b>: 분석 그림과 출력값에서 옮겨 적은 값이며 원본 결과로 교체 예정
+  </div>
+
+  <header class="top">
+    <div class="title">
+      <h1>CMIP6 GCM 재현성 뷰어 <span class="sub">북서태평양 · ERA5 비교</span></h1>
+      <p id="dataStatus" class="data-status" aria-live="polite">자료를 불러오는 중…</p>
+    </div>
+    <div class="toolbar">
+      <label class="ctl"><span>변수</span><select id="varSelect" aria-label="변수 선택"></select></label>
+      <label class="ctl"><span>모델 강조</span><select id="modelSelect" aria-label="강조할 모델"></select></label>
+      <label class="btn file-btn" title="같은 구조의 JSON 파일을 열거나 화면에 끌어다 놓으세요. 파일은 브라우저 안에서만 읽습니다.">
+        JSON 열기<input id="fileInput" type="file" accept=".json,application/json" hidden>
+      </label>
+      <button id="resetData" class="btn" hidden>기본 자료로</button>
+      <button id="themeBtn" class="btn" aria-label="밝은/어두운 모드 전환">◐ 자동</button>
+    </div>
+  </header>
+
+  <nav id="tabs" class="tabs" role="tablist" aria-label="화면"></nav>
+
+  <div id="selChip" class="sel-chip" hidden>
+    강조 중: <b id="selName"></b>
+    <button id="selClear" class="btn small" aria-label="강조 해제">해제 ✕</button>
+  </div>
+
+  <main id="panels"></main>
+
+  <footer class="foot">
+    <p>파일을 화면에 끌어다 놓으면 같은 구조의 다른 JSON으로 바꿔 볼 수 있습니다 (파일은 서버로 전송되지 않습니다).</p>
+    <p>그림: <a href="https://plotly.com/javascript/" rel="noopener">Plotly.js</a> 4.2.0 (MIT) · 해안선: <a href="https://www.naturalearthdata.com/" rel="noopener">Natural Earth</a> (public domain)</p>
+  </footer>
+
+  <div id="dropOverlay" class="drop-overlay" hidden><div>JSON 파일을 놓으세요<br><small>브라우저 안에서만 읽습니다</small></div></div>
+
+  <script src="vendor/plotly-4.2.0/plotly.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

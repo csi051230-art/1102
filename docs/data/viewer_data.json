@@ -1,0 +1,5576 @@
+{
+ "meta": {
+  "title": "CMIP6 GCM sea-level pressure (psl) reproducibility over the Northwest Pacific",
+  "version": "1.0-provisional",
+  "data_status": "PROVISIONAL: values transcribed from the analysis figures and printed outputs. Per-statistic NRMSE has 2 decimals; mean/ext NRMSE 3 decimals. Entire: corr and sd_ratio for all 21 models (Taylor diagram; printed values for 8 models, others digitized from the figure, see metrics[...][...][model].taylor_source), sd_mod and crmse derived from them. Other periods: corr/bias/sd_ratio/rmse for 8 models only (others null). bias/rmse: 8 models only. No spatial fields. Regenerate with p8_viewer_data.py from the original results to replace this file.",
+  "generated": "2026-11-01",
+  "variable": {
+   "name": "psl",
+   "long_name": "sea-level pressure",
+   "units": "hPa"
+  },
+  "reference": "ERA5 daily mean (hourly → daily)",
+  "experiment": "historical, r1i1p1f1, daily",
+  "period": "1979-01-01/2014-12-31 (36 years)",
+  "region": {
+   "lon": [
+    115.3125,
+    149.0625
+   ],
+   "lat": [
+    20.625,
+    51.875
+   ],
+   "common_grid": "19 (lon) × 26 (lat) = 494 points, bilinear interpolation of native-grid statistics",
+   "weights": "cos(latitude)"
+  },
+  "periods": {
+   "Entire": "all days 1979–2014",
+   "JJA": "all June–August days pooled",
+   "June": "all June days pooled",
+   "July": "all July days pooled",
+   "August": "all August days pooled"
+  },
+  "stats": {
+   "mean": "mean",
+   "p5": "5th percentile (low-pressure tail)",
+   "p1": "1st percentile",
+   "min": "minimum (single day)"
+  },
+  "metrics": {
+   "nrmse": "RMSE / spatial SD of ERA5 (lower is better)",
+   "rmse": "area-weighted RMSE [hPa]",
+   "crmse": "centred RMSE [hPa]",
+   "bias": "area-weighted mean bias, model − ERA5 [hPa]",
+   "corr": "area-weighted spatial correlation",
+   "sd_ratio": "spatial SD model / ERA5",
+   "sd_mod": "spatial SD of model [hPa]"
+  },
+  "ranking": {
+   "mean": "rank of psl mean NRMSE",
+   "ext": "rank of the arithmetic mean of p5, p1, min NRMSE",
+   "overall": "rank of (mean NRMSE + ext NRMSE) / 2",
+   "ranksum": "rank of (mean_rank + ext_rank), sensitivity only",
+   "order": "ascending NRMSE (1 = best); ties share the lowest rank"
+  },
+  "qc": "GCM days with domain-mean psl < 985 hPa or > 1035 hPa removed (AWI-ESM-1-REcoM: 36 days, none in JJA)",
+  "model_selection": "models with psl, uas, vas for historical, SSP1-2.6, SSP2-4.5, SSP5-8.5 (20) + IPSL-CM6A-LR",
+  "notes": [
+   "NRMSE denominators differ between periods; compare RMSE or correlation across periods.",
+   "min is a single-day value and is dominated by tropical cyclones in summer; interpret with care."
+  ]
+ },
+ "models": [
+  {
+   "id": "ACCESS-CM2",
+   "institution_id": "CSIRO-ARCCSS",
+   "institution": "Commonwealth Scientific and Industrial Research Organisation / Australian Research Council Centre of Excellence for Climate System Science",
+   "country": "Australia",
+   "grid_points": {
+    "lon": 192,
+    "lat": 144
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.25
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#1f77b4"
+  },
+  {
+   "id": "ACCESS-ESM1-5",
+   "institution_id": "CSIRO",
+   "institution": "Commonwealth Scientific and Industrial Research Organisation",
+   "country": "Australia",
+   "grid_points": {
+    "lon": 192,
+    "lat": 145
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.25
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#ff7f0e"
+  },
+  {
+   "id": "AWI-ESM-1-REcoM",
+   "institution_id": "AWI",
+   "institution": "Alfred Wegener Institute, Helmholtz Centre for Polar and Marine Research",
+   "country": "Germany",
+   "grid_points": {
+    "lon": 192,
+    "lat": 96
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.8652
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#2ca02c"
+  },
+  {
+   "id": "CMCC-CM2-SR5",
+   "institution_id": "CMCC",
+   "institution": "Fondazione Centro Euro-Mediterraneo sui Cambiamenti Climatici",
+   "country": "Italy",
+   "grid_points": {
+    "lon": 288,
+    "lat": 192
+   },
+   "resolution_deg": {
+    "lon": 1.25,
+    "lat": 0.9424
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gn",
+   "calendar": "365_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#d62728"
+  },
+  {
+   "id": "CMCC-ESM2",
+   "institution_id": "CMCC",
+   "institution": "Fondazione Centro Euro-Mediterraneo sui Cambiamenti Climatici",
+   "country": "Italy",
+   "grid_points": {
+    "lon": 288,
+    "lat": 192
+   },
+   "resolution_deg": {
+    "lon": 1.25,
+    "lat": 0.9424
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gn",
+   "calendar": "365_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#9467bd"
+  },
+  {
+   "id": "CanESM5",
+   "institution_id": "CCCma",
+   "institution": "Canadian Centre for Climate Modelling and Analysis",
+   "country": "Canada",
+   "grid_points": {
+    "lon": 128,
+    "lat": 64
+   },
+   "resolution_deg": {
+    "lon": 2.8125,
+    "lat": 2.7905
+   },
+   "nominal_resolution": "500 km",
+   "grid_label": "gn",
+   "calendar": "365_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#8c564b"
+  },
+  {
+   "id": "EC-Earth3",
+   "institution_id": "EC-Earth-Consortium",
+   "institution": "EC-Earth Consortium",
+   "country": "Europe",
+   "grid_points": {
+    "lon": 512,
+    "lat": 256
+   },
+   "resolution_deg": {
+    "lon": 0.7031,
+    "lat": 0.7018
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gr",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#e377c2"
+  },
+  {
+   "id": "EC-Earth3-Veg",
+   "institution_id": "EC-Earth-Consortium",
+   "institution": "EC-Earth Consortium",
+   "country": "Europe",
+   "grid_points": {
+    "lon": 512,
+    "lat": 256
+   },
+   "resolution_deg": {
+    "lon": 0.7031,
+    "lat": 0.7018
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gr",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#7f7f7f"
+  },
+  {
+   "id": "EC-Earth3-Veg-LR",
+   "institution_id": "EC-Earth-Consortium",
+   "institution": "EC-Earth Consortium",
+   "country": "Europe",
+   "grid_points": {
+    "lon": 320,
+    "lat": 160
+   },
+   "resolution_deg": {
+    "lon": 1.125,
+    "lat": 1.1215
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gr",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#bcbd22"
+  },
+  {
+   "id": "GFDL-ESM4",
+   "institution_id": "NOAA-GFDL",
+   "institution": "NOAA Geophysical Fluid Dynamics Laboratory",
+   "country": "USA",
+   "grid_points": {
+    "lon": 288,
+    "lat": 180
+   },
+   "resolution_deg": {
+    "lon": 1.25,
+    "lat": 1.0
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gr1",
+   "calendar": "noleap",
+   "variant_label": "r1i1p1f1",
+   "color": "#17becf"
+  },
+  {
+   "id": "IITM-ESM",
+   "institution_id": "CCCR-IITM",
+   "institution": "Centre for Climate Change Research, Indian Institute of Tropical Meteorology",
+   "country": "India",
+   "grid_points": {
+    "lon": 192,
+    "lat": 94
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.9047
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "julian",
+   "variant_label": "r1i1p1f1",
+   "color": "#393b79"
+  },
+  {
+   "id": "INM-CM4-8",
+   "institution_id": "INM",
+   "institution": "Institute for Numerical Mathematics, Russian Academy of Science",
+   "country": "Russia",
+   "grid_points": {
+    "lon": 180,
+    "lat": 120
+   },
+   "resolution_deg": {
+    "lon": 2.0,
+    "lat": 1.5
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gr1",
+   "calendar": "365_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#637939"
+  },
+  {
+   "id": "INM-CM5-0",
+   "institution_id": "INM",
+   "institution": "Institute for Numerical Mathematics, Russian Academy of Science",
+   "country": "Russia",
+   "grid_points": {
+    "lon": 180,
+    "lat": 120
+   },
+   "resolution_deg": {
+    "lon": 2.0,
+    "lat": 1.5
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gr1",
+   "calendar": "365_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#8c6d31"
+  },
+  {
+   "id": "IPSL-CM6A-LR",
+   "institution_id": "IPSL",
+   "institution": "Institut Pierre-Simon Laplace",
+   "country": "France",
+   "grid_points": {
+    "lon": 144,
+    "lat": 143
+   },
+   "resolution_deg": {
+    "lon": 2.5,
+    "lat": 1.2676
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gr",
+   "calendar": "gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#843c39"
+  },
+  {
+   "id": "KACE-1-0-G",
+   "institution_id": "NIMS-KMA",
+   "institution": "National Institute of Meteorological Sciences / Korea Meteorological Administration",
+   "country": "Korea",
+   "grid_points": {
+    "lon": 192,
+    "lat": 144
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.25
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gr",
+   "calendar": "360_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#7b4173"
+  },
+  {
+   "id": "KIOST-ESM",
+   "institution_id": "KIOST",
+   "institution": "Korea Institute of Ocean Science and Technology",
+   "country": "Korea",
+   "grid_points": {
+    "lon": 192,
+    "lat": 96
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.8947
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gr1",
+   "calendar": "365_day",
+   "variant_label": "r1i1p1f1",
+   "color": "#5254a3"
+  },
+  {
+   "id": "MIROC6",
+   "institution_id": "MIROC",
+   "institution": "JAMSTEC, AORI (Univ. of Tokyo), NIES, and RIKEN R-CCS",
+   "country": "Japan",
+   "grid_points": {
+    "lon": 256,
+    "lat": 128
+   },
+   "resolution_deg": {
+    "lon": 1.4062,
+    "lat": 1.4008
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#a55194"
+  },
+  {
+   "id": "MPI-ESM1-2-HR",
+   "institution_id": "MPI-M",
+   "institution": "Max Planck Institute for Meteorology",
+   "country": "Germany",
+   "grid_points": {
+    "lon": 384,
+    "lat": 192
+   },
+   "resolution_deg": {
+    "lon": 0.9375,
+    "lat": 0.9351
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gn",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#bd9e39"
+  },
+  {
+   "id": "MPI-ESM1-2-LR",
+   "institution_id": "MPI-M",
+   "institution": "Max Planck Institute for Meteorology",
+   "country": "Germany",
+   "grid_points": {
+    "lon": 192,
+    "lat": 96
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.8652
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#ad494a"
+  },
+  {
+   "id": "MRI-ESM2-0",
+   "institution_id": "MRI",
+   "institution": "Meteorological Research Institute",
+   "country": "Japan",
+   "grid_points": {
+    "lon": 320,
+    "lat": 160
+   },
+   "resolution_deg": {
+    "lon": 1.125,
+    "lat": 1.1215
+   },
+   "nominal_resolution": "100 km",
+   "grid_label": "gn",
+   "calendar": "proleptic_gregorian",
+   "variant_label": "r1i1p1f1",
+   "color": "#8ca252"
+  },
+  {
+   "id": "NESM3",
+   "institution_id": "NUIST",
+   "institution": "Nanjing University of Information Science and Technology",
+   "country": "China",
+   "grid_points": {
+    "lon": 192,
+    "lat": 96
+   },
+   "resolution_deg": {
+    "lon": 1.875,
+    "lat": 1.8652
+   },
+   "nominal_resolution": "250 km",
+   "grid_label": "gn",
+   "calendar": "standard",
+   "variant_label": "r1i1p1f1",
+   "color": "#000000"
+  }
+ ],
+ "periods": [
+  "Entire",
+  "JJA",
+  "June",
+  "July",
+  "August"
+ ],
+ "stats": [
+  "mean",
+  "p5",
+  "p1",
+  "min"
+ ],
+ "reference_sd": {
+  "Entire": {
+   "mean": 1.5,
+   "p5": 2.79,
+   "p1": 3.48,
+   "min": 8.77
+  },
+  "JJA": {
+   "mean": 2.38,
+   "p5": 2.47,
+   "p1": 2.46,
+   "min": 7.33
+  },
+  "June": {
+   "mean": 2.75,
+   "p5": 3.38,
+   "p1": 3.79,
+   "min": 5.1
+  },
+  "July": {
+   "mean": 2.84,
+   "p5": 2.88,
+   "p1": 2.86,
+   "min": 5.77
+  },
+  "August": {
+   "mean": 1.93,
+   "p5": 2.08,
+   "p1": 3.4,
+   "min": 8.24
+  }
+ },
+ "metrics": {
+  "Entire": {
+   "mean": {
+    "ACCESS-CM2": {
+     "nrmse": 0.78,
+     "rmse": null,
+     "crmse": 0.759,
+     "bias": null,
+     "corr": 0.899,
+     "sd_ratio": 1.153,
+     "sd_mod": 1.73,
+     "taylor_source": "digitized"
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.53,
+     "rmse": null,
+     "crmse": 0.537,
+     "bias": null,
+     "corr": 0.938,
+     "sd_ratio": 1.027,
+     "sd_mod": 1.54,
+     "taylor_source": "digitized"
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 0.55,
+     "rmse": 0.83,
+     "crmse": 0.741,
+     "bias": 0.36,
+     "corr": 0.93,
+     "sd_ratio": 1.26,
+     "sd_mod": 1.89,
+     "taylor_source": "printed"
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.68,
+     "rmse": null,
+     "crmse": 0.745,
+     "bias": null,
+     "corr": 0.932,
+     "sd_ratio": 1.272,
+     "sd_mod": 1.908,
+     "taylor_source": "digitized"
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.68,
+     "rmse": 1.02,
+     "crmse": 0.738,
+     "bias": 0.69,
+     "corr": 0.95,
+     "sd_ratio": 1.33,
+     "sd_mod": 1.995,
+     "taylor_source": "printed"
+    },
+    "CanESM5": {
+     "nrmse": 0.54,
+     "rmse": null,
+     "crmse": 0.721,
+     "bias": null,
+     "corr": 0.955,
+     "sd_ratio": 1.333,
+     "sd_mod": 1.999,
+     "taylor_source": "digitized_occluded"
+    },
+    "EC-Earth3": {
+     "nrmse": 0.49,
+     "rmse": null,
+     "crmse": 0.679,
+     "bias": null,
+     "corr": 0.959,
+     "sd_ratio": 1.312,
+     "sd_mod": 1.968,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.43,
+     "rmse": null,
+     "crmse": 0.602,
+     "bias": null,
+     "corr": 0.965,
+     "sd_ratio": 1.269,
+     "sd_mod": 1.903,
+     "taylor_source": "digitized_occluded"
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.45,
+     "rmse": null,
+     "crmse": 0.572,
+     "bias": null,
+     "corr": 0.958,
+     "sd_ratio": 1.209,
+     "sd_mod": 1.814,
+     "taylor_source": "digitized"
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.43,
+     "rmse": null,
+     "crmse": 0.632,
+     "bias": null,
+     "corr": 0.96,
+     "sd_ratio": 1.275,
+     "sd_mod": 1.912,
+     "taylor_source": "digitized"
+    },
+    "IITM-ESM": {
+     "nrmse": 2.07,
+     "rmse": 3.12,
+     "crmse": 1.618,
+     "bias": 2.67,
+     "corr": 0.62,
+     "sd_ratio": 1.36,
+     "sd_mod": 2.04,
+     "taylor_source": "printed"
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.54,
+     "rmse": 0.81,
+     "crmse": 0.743,
+     "bias": -0.34,
+     "corr": 0.88,
+     "sd_ratio": 1.02,
+     "sd_mod": 1.53,
+     "taylor_source": "printed"
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.62,
+     "rmse": null,
+     "crmse": 0.688,
+     "bias": null,
+     "corr": 0.895,
+     "sd_ratio": 1.001,
+     "sd_mod": 1.501,
+     "taylor_source": "digitized"
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.24,
+     "rmse": 1.86,
+     "crmse": 1.663,
+     "bias": -0.81,
+     "corr": 0.75,
+     "sd_ratio": 1.64,
+     "sd_mod": 2.46,
+     "taylor_source": "printed"
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.88,
+     "rmse": null,
+     "crmse": 0.898,
+     "bias": null,
+     "corr": 0.83,
+     "sd_ratio": 1.048,
+     "sd_mod": 1.572,
+     "taylor_source": "digitized"
+    },
+    "KIOST-ESM": {
+     "nrmse": 2.56,
+     "rmse": 3.84,
+     "crmse": 0.972,
+     "bias": 3.72,
+     "corr": 0.89,
+     "sd_ratio": 1.35,
+     "sd_mod": 2.025,
+     "taylor_source": "printed"
+    },
+    "MIROC6": {
+     "nrmse": 1.62,
+     "rmse": 2.44,
+     "crmse": 0.866,
+     "bias": -2.28,
+     "corr": 0.86,
+     "sd_ratio": 1.13,
+     "sd_mod": 1.695,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.32,
+     "rmse": 0.48,
+     "crmse": 0.502,
+     "bias": 0.04,
+     "corr": 0.97,
+     "sd_ratio": 1.2,
+     "sd_mod": 1.8,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.43,
+     "rmse": null,
+     "crmse": 0.626,
+     "bias": null,
+     "corr": 0.954,
+     "sd_ratio": 1.244,
+     "sd_mod": 1.866,
+     "taylor_source": "digitized"
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": 0.904,
+     "bias": null,
+     "corr": 0.915,
+     "sd_ratio": 1.363,
+     "sd_mod": 2.045,
+     "taylor_source": "digitized"
+    },
+    "NESM3": {
+     "nrmse": 0.55,
+     "rmse": null,
+     "crmse": 0.59,
+     "bias": null,
+     "corr": 0.944,
+     "sd_ratio": 1.158,
+     "sd_mod": 1.737,
+     "taylor_source": "digitized"
+    }
+   },
+   "p5": {
+    "ACCESS-CM2": {
+     "nrmse": 0.45,
+     "rmse": null,
+     "crmse": 0.964,
+     "bias": null,
+     "corr": 0.961,
+     "sd_ratio": 0.754,
+     "sd_mod": 2.104,
+     "taylor_source": "digitized"
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": 1.154,
+     "bias": null,
+     "corr": 0.917,
+     "sd_ratio": 0.807,
+     "sd_mod": 2.252,
+     "taylor_source": "digitized"
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 0.77,
+     "rmse": 2.16,
+     "crmse": 2.164,
+     "bias": 0.1,
+     "corr": 0.95,
+     "sd_ratio": 1.66,
+     "sd_mod": 4.631,
+     "taylor_source": "printed"
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.38,
+     "rmse": null,
+     "crmse": 0.941,
+     "bias": null,
+     "corr": 0.946,
+     "sd_ratio": 0.853,
+     "sd_mod": 2.38,
+     "taylor_source": "digitized"
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.35,
+     "rmse": 0.97,
+     "crmse": 0.872,
+     "bias": -0.37,
+     "corr": 0.95,
+     "sd_ratio": 0.94,
+     "sd_mod": 2.623,
+     "taylor_source": "printed"
+    },
+    "CanESM5": {
+     "nrmse": 0.83,
+     "rmse": null,
+     "crmse": 0.765,
+     "bias": null,
+     "corr": 0.962,
+     "sd_ratio": 0.985,
+     "sd_mod": 2.748,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3": {
+     "nrmse": 0.58,
+     "rmse": null,
+     "crmse": 1.293,
+     "bias": null,
+     "corr": 0.929,
+     "sd_ratio": 1.208,
+     "sd_mod": 3.37,
+     "taylor_source": "digitized_occluded"
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.55,
+     "rmse": null,
+     "crmse": 1.092,
+     "bias": null,
+     "corr": 0.939,
+     "sd_ratio": 1.126,
+     "sd_mod": 3.142,
+     "taylor_source": "digitized_occluded"
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.54,
+     "rmse": null,
+     "crmse": 1.182,
+     "bias": null,
+     "corr": 0.941,
+     "sd_ratio": 1.196,
+     "sd_mod": 3.337,
+     "taylor_source": "digitized"
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": 1.555,
+     "bias": null,
+     "corr": 0.866,
+     "sd_ratio": 1.112,
+     "sd_mod": 3.102,
+     "taylor_source": "digitized"
+    },
+    "IITM-ESM": {
+     "nrmse": 0.73,
+     "rmse": 2.04,
+     "crmse": 1.683,
+     "bias": 1.17,
+     "corr": 0.82,
+     "sd_ratio": 0.63,
+     "sd_mod": 1.758,
+     "taylor_source": "printed"
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.57,
+     "rmse": 1.59,
+     "crmse": 1.029,
+     "bias": 1.22,
+     "corr": 0.96,
+     "sd_ratio": 1.2,
+     "sd_mod": 3.348,
+     "taylor_source": "printed"
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.45,
+     "rmse": null,
+     "crmse": 1.261,
+     "bias": null,
+     "corr": 0.921,
+     "sd_ratio": 1.15,
+     "sd_mod": 3.208,
+     "taylor_source": "digitized_occluded"
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.1,
+     "rmse": 3.08,
+     "crmse": 2.866,
+     "bias": -1.17,
+     "corr": 0.91,
+     "sd_ratio": 1.85,
+     "sd_mod": 5.162,
+     "taylor_source": "printed"
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.54,
+     "rmse": null,
+     "crmse": 1.241,
+     "bias": null,
+     "corr": 0.908,
+     "sd_ratio": 0.759,
+     "sd_mod": 2.118,
+     "taylor_source": "digitized"
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.21,
+     "rmse": 3.37,
+     "crmse": 1.892,
+     "bias": 2.77,
+     "corr": 0.75,
+     "sd_ratio": 0.9,
+     "sd_mod": 2.511,
+     "taylor_source": "printed"
+    },
+    "MIROC6": {
+     "nrmse": 0.87,
+     "rmse": 2.44,
+     "crmse": 1.17,
+     "bias": -2.13,
+     "corr": 0.95,
+     "sd_ratio": 1.23,
+     "sd_mod": 3.432,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.5,
+     "rmse": 1.4,
+     "crmse": 1.225,
+     "bias": -0.72,
+     "corr": 0.93,
+     "sd_ratio": 1.17,
+     "sd_mod": 3.264,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.6,
+     "rmse": null,
+     "crmse": 1.508,
+     "bias": null,
+     "corr": 0.936,
+     "sd_ratio": 1.346,
+     "sd_mod": 3.755,
+     "taylor_source": "digitized"
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.7,
+     "rmse": null,
+     "crmse": 0.973,
+     "bias": null,
+     "corr": 0.969,
+     "sd_ratio": 1.215,
+     "sd_mod": 3.39,
+     "taylor_source": "digitized"
+    },
+    "NESM3": {
+     "nrmse": 0.8,
+     "rmse": null,
+     "crmse": 1.624,
+     "bias": null,
+     "corr": 0.822,
+     "sd_ratio": 0.942,
+     "sd_mod": 2.628,
+     "taylor_source": "digitized"
+    }
+   },
+   "p1": {
+    "ACCESS-CM2": {
+     "nrmse": 0.39,
+     "rmse": null,
+     "crmse": 0.881,
+     "bias": null,
+     "corr": 0.974,
+     "sd_ratio": 0.861,
+     "sd_mod": 2.996,
+     "taylor_source": "digitized"
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": 1.345,
+     "bias": null,
+     "corr": 0.929,
+     "sd_ratio": 0.818,
+     "sd_mod": 2.847,
+     "taylor_source": "digitized"
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.07,
+     "rmse": 3.71,
+     "crmse": 3.673,
+     "bias": 0.24,
+     "corr": 0.92,
+     "sd_ratio": 1.9,
+     "sd_mod": 6.612,
+     "taylor_source": "printed"
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.35,
+     "rmse": null,
+     "crmse": 1.007,
+     "bias": null,
+     "corr": 0.958,
+     "sd_ratio": 0.919,
+     "sd_mod": 3.198,
+     "taylor_source": "digitized"
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.31,
+     "rmse": 1.07,
+     "crmse": 0.99,
+     "bias": -0.54,
+     "corr": 0.96,
+     "sd_ratio": 1.01,
+     "sd_mod": 3.515,
+     "taylor_source": "printed"
+    },
+    "CanESM5": {
+     "nrmse": 0.63,
+     "rmse": null,
+     "crmse": 1.324,
+     "bias": null,
+     "corr": 0.947,
+     "sd_ratio": 1.151,
+     "sd_mod": 4.005,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3": {
+     "nrmse": 0.65,
+     "rmse": null,
+     "crmse": 1.978,
+     "bias": null,
+     "corr": 0.952,
+     "sd_ratio": 1.431,
+     "sd_mod": 4.98,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": 1.784,
+     "bias": null,
+     "corr": 0.954,
+     "sd_ratio": 1.37,
+     "sd_mod": 4.768,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.7,
+     "rmse": null,
+     "crmse": 2.137,
+     "bias": null,
+     "corr": 0.948,
+     "sd_ratio": 1.473,
+     "sd_mod": 5.126,
+     "taylor_source": "digitized"
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.67,
+     "rmse": null,
+     "crmse": 2.096,
+     "bias": null,
+     "corr": 0.911,
+     "sd_ratio": 1.35,
+     "sd_mod": 4.698,
+     "taylor_source": "digitized"
+    },
+    "IITM-ESM": {
+     "nrmse": 0.65,
+     "rmse": 2.27,
+     "crmse": 1.961,
+     "bias": 1.14,
+     "corr": 0.83,
+     "sd_ratio": 0.75,
+     "sd_mod": 2.61,
+     "taylor_source": "printed"
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.99,
+     "rmse": 3.43,
+     "crmse": 2.294,
+     "bias": 2.53,
+     "corr": 0.92,
+     "sd_ratio": 1.45,
+     "sd_mod": 5.046,
+     "taylor_source": "printed"
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.82,
+     "rmse": null,
+     "crmse": 2.43,
+     "bias": null,
+     "corr": 0.896,
+     "sd_ratio": 1.435,
+     "sd_mod": 4.994,
+     "taylor_source": "digitized"
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.3,
+     "rmse": 4.53,
+     "crmse": 4.474,
+     "bias": -0.84,
+     "corr": 0.86,
+     "sd_ratio": 2.04,
+     "sd_mod": 7.099,
+     "taylor_source": "printed"
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.47,
+     "rmse": null,
+     "crmse": 1.261,
+     "bias": null,
+     "corr": 0.951,
+     "sd_ratio": 0.762,
+     "sd_mod": 2.652,
+     "taylor_source": "digitized"
+    },
+    "KIOST-ESM": {
+     "nrmse": 0.88,
+     "rmse": 3.05,
+     "crmse": 2.36,
+     "bias": 1.96,
+     "corr": 0.77,
+     "sd_ratio": 1.0,
+     "sd_mod": 3.48,
+     "taylor_source": "printed"
+    },
+    "MIROC6": {
+     "nrmse": 0.64,
+     "rmse": 2.24,
+     "crmse": 1.667,
+     "bias": -1.51,
+     "corr": 0.91,
+     "sd_ratio": 1.15,
+     "sd_mod": 4.002,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.48,
+     "rmse": 1.67,
+     "crmse": 1.599,
+     "bias": -0.44,
+     "corr": 0.97,
+     "sd_ratio": 1.36,
+     "sd_mod": 4.733,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.69,
+     "rmse": null,
+     "crmse": 2.221,
+     "bias": null,
+     "corr": 0.952,
+     "sd_ratio": 1.512,
+     "sd_mod": 5.262,
+     "taylor_source": "digitized"
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.72,
+     "rmse": null,
+     "crmse": 1.469,
+     "bias": null,
+     "corr": 0.96,
+     "sd_ratio": 1.276,
+     "sd_mod": 4.44,
+     "taylor_source": "digitized"
+    },
+    "NESM3": {
+     "nrmse": 0.82,
+     "rmse": null,
+     "crmse": 1.82,
+     "bias": null,
+     "corr": 0.915,
+     "sd_ratio": 1.248,
+     "sd_mod": 4.343,
+     "taylor_source": "digitized"
+    }
+   },
+   "min": {
+    "ACCESS-CM2": {
+     "nrmse": 0.9,
+     "rmse": null,
+     "crmse": 7.361,
+     "bias": null,
+     "corr": 0.588,
+     "sd_ratio": 0.812,
+     "sd_mod": 7.121,
+     "taylor_source": "digitized"
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.78,
+     "rmse": null,
+     "crmse": 6.321,
+     "bias": null,
+     "corr": 0.699,
+     "sd_ratio": 0.789,
+     "sd_mod": 6.92,
+     "taylor_source": "digitized"
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.7,
+     "rmse": 14.89,
+     "crmse": 13.405,
+     "bias": 6.36,
+     "corr": 0.18,
+     "sd_ratio": 1.35,
+     "sd_mod": 11.84,
+     "taylor_source": "printed"
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": 6.84,
+     "bias": null,
+     "corr": 0.647,
+     "sd_ratio": 0.811,
+     "sd_mod": 7.112,
+     "taylor_source": "digitized"
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.69,
+     "rmse": 6.08,
+     "crmse": 6.071,
+     "bias": 0.35,
+     "corr": 0.73,
+     "sd_ratio": 0.84,
+     "sd_mod": 7.367,
+     "taylor_source": "printed"
+    },
+    "CanESM5": {
+     "nrmse": 1.15,
+     "rmse": null,
+     "crmse": 8.613,
+     "bias": null,
+     "corr": 0.443,
+     "sd_ratio": 0.844,
+     "sd_mod": 7.402,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3": {
+     "nrmse": 1.27,
+     "rmse": null,
+     "crmse": 10.121,
+     "bias": null,
+     "corr": 0.403,
+     "sd_ratio": 1.106,
+     "sd_mod": 9.7,
+     "taylor_source": "digitized_hidden"
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 1.22,
+     "rmse": null,
+     "crmse": 9.632,
+     "bias": null,
+     "corr": 0.438,
+     "sd_ratio": 1.069,
+     "sd_mod": 9.375,
+     "taylor_source": "digitized"
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 1.26,
+     "rmse": null,
+     "crmse": 10.121,
+     "bias": null,
+     "corr": 0.403,
+     "sd_ratio": 1.106,
+     "sd_mod": 9.7,
+     "taylor_source": "digitized"
+    },
+    "GFDL-ESM4": {
+     "nrmse": 1.06,
+     "rmse": null,
+     "crmse": 9.074,
+     "bias": null,
+     "corr": 0.462,
+     "sd_ratio": 0.995,
+     "sd_mod": 8.726,
+     "taylor_source": "digitized"
+    },
+    "IITM-ESM": {
+     "nrmse": 0.98,
+     "rmse": 8.61,
+     "crmse": 6.092,
+     "bias": 6.1,
+     "corr": 0.72,
+     "sd_ratio": 0.69,
+     "sd_mod": 6.051,
+     "taylor_source": "printed"
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.0,
+     "rmse": 17.57,
+     "crmse": 11.39,
+     "bias": 13.4,
+     "corr": 0.23,
+     "sd_ratio": 1.09,
+     "sd_mod": 9.559,
+     "taylor_source": "printed"
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.76,
+     "rmse": null,
+     "crmse": 10.995,
+     "bias": null,
+     "corr": 0.267,
+     "sd_ratio": 1.069,
+     "sd_mod": 9.375,
+     "taylor_source": "digitized"
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.78,
+     "rmse": 15.65,
+     "crmse": 14.729,
+     "bias": 5.2,
+     "corr": 0.17,
+     "sd_ratio": 1.53,
+     "sd_mod": 13.418,
+     "taylor_source": "printed"
+    },
+    "KACE-1-0-G": {
+     "nrmse": 1.02,
+     "rmse": null,
+     "crmse": 7.604,
+     "bias": null,
+     "corr": 0.52,
+     "sd_ratio": 0.669,
+     "sd_mod": 5.867,
+     "taylor_source": "digitized"
+    },
+    "KIOST-ESM": {
+     "nrmse": 0.87,
+     "rmse": 7.64,
+     "crmse": 5.639,
+     "bias": 5.19,
+     "corr": 0.77,
+     "sd_ratio": 0.85,
+     "sd_mod": 7.454,
+     "taylor_source": "printed"
+    },
+    "MIROC6": {
+     "nrmse": 0.95,
+     "rmse": 8.35,
+     "crmse": 7.004,
+     "bias": 4.53,
+     "corr": 0.61,
+     "sd_ratio": 0.71,
+     "sd_mod": 6.227,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.33,
+     "rmse": 11.62,
+     "crmse": 10.229,
+     "bias": 5.52,
+     "corr": 0.34,
+     "sd_ratio": 1.03,
+     "sd_mod": 9.033,
+     "taylor_source": "printed"
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 1.32,
+     "rmse": null,
+     "crmse": 10.677,
+     "bias": null,
+     "corr": 0.383,
+     "sd_ratio": 1.176,
+     "sd_mod": 10.314,
+     "taylor_source": "digitized"
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.89,
+     "rmse": null,
+     "crmse": 7.832,
+     "bias": null,
+     "corr": 0.589,
+     "sd_ratio": 0.969,
+     "sd_mod": 8.498,
+     "taylor_source": "digitized"
+    },
+    "NESM3": {
+     "nrmse": 1.23,
+     "rmse": null,
+     "crmse": 10.639,
+     "bias": null,
+     "corr": 0.357,
+     "sd_ratio": 1.131,
+     "sd_mod": 9.919,
+     "taylor_source": "digitized"
+    }
+   }
+  },
+  "JJA": {
+   "mean": {
+    "ACCESS-CM2": {
+     "nrmse": 0.47,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.44,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.1,
+     "rmse": 2.6,
+     "crmse": null,
+     "bias": 2.16,
+     "corr": 0.91,
+     "sd_ratio": 1.37,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.36,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.36,
+     "rmse": 0.85,
+     "crmse": null,
+     "bias": 0.55,
+     "corr": 0.97,
+     "sd_ratio": 1.07,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.88,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.38,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.34,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.35,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.56,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.62,
+     "rmse": 1.48,
+     "crmse": null,
+     "bias": 1.25,
+     "corr": 0.95,
+     "sd_ratio": 0.87,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.49,
+     "rmse": 1.17,
+     "crmse": null,
+     "bias": 0.84,
+     "corr": 0.96,
+     "sd_ratio": 1.14,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.39,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 0.56,
+     "rmse": 1.32,
+     "crmse": null,
+     "bias": 0.03,
+     "corr": 0.91,
+     "sd_ratio": 1.27,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.51,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 2.11,
+     "rmse": 5.01,
+     "crmse": null,
+     "bias": 4.51,
+     "corr": 0.57,
+     "sd_ratio": 0.98,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.04,
+     "rmse": 2.46,
+     "crmse": null,
+     "bias": -2.16,
+     "corr": 0.94,
+     "sd_ratio": 1.32,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.47,
+     "rmse": 1.12,
+     "crmse": null,
+     "bias": 0.25,
+     "corr": 0.89,
+     "sd_ratio": 0.96,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.55,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.38,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.79,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p5": {
+    "ACCESS-CM2": {
+     "nrmse": 0.67,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 1.09,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.13,
+     "rmse": 2.78,
+     "crmse": null,
+     "bias": 1.89,
+     "corr": 0.94,
+     "sd_ratio": 1.69,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.46,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.3,
+     "rmse": 0.73,
+     "crmse": null,
+     "bias": -0.4,
+     "corr": 0.97,
+     "sd_ratio": 1.02,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.94,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.41,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.49,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.45,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.49,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.7,
+     "rmse": 1.74,
+     "crmse": null,
+     "bias": 0.41,
+     "corr": 0.73,
+     "sd_ratio": 0.67,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 1.21,
+     "rmse": 2.99,
+     "crmse": null,
+     "bias": 2.78,
+     "corr": 0.95,
+     "sd_ratio": 1.25,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.91,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.01,
+     "rmse": 2.49,
+     "crmse": null,
+     "bias": 0.51,
+     "corr": 0.87,
+     "sd_ratio": 1.72,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.85,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.45,
+     "rmse": 3.59,
+     "crmse": null,
+     "bias": 2.41,
+     "corr": 0.32,
+     "sd_ratio": 0.82,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 0.96,
+     "rmse": 2.38,
+     "crmse": null,
+     "bias": -1.86,
+     "corr": 0.9,
+     "sd_ratio": 1.31,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.3,
+     "rmse": 0.75,
+     "crmse": null,
+     "bias": 0.1,
+     "corr": 0.96,
+     "sd_ratio": 1.02,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.5,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.83,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.95,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p1": {
+    "ACCESS-CM2": {
+     "nrmse": 0.76,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 1.02,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.91,
+     "rmse": 4.7,
+     "crmse": null,
+     "bias": 3.12,
+     "corr": 0.64,
+     "sd_ratio": 1.84,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.72,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.65,
+     "rmse": 1.59,
+     "crmse": null,
+     "bias": -0.12,
+     "corr": 0.78,
+     "sd_ratio": 0.95,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.89,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.86,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.95,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.68,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.82,
+     "rmse": 2.0,
+     "crmse": null,
+     "bias": 0.96,
+     "corr": 0.71,
+     "sd_ratio": 0.81,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.31,
+     "rmse": 5.68,
+     "crmse": null,
+     "bias": 5.12,
+     "corr": 0.65,
+     "sd_ratio": 1.3,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.92,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.93,
+     "rmse": 4.74,
+     "crmse": null,
+     "bias": 1.66,
+     "corr": 0.45,
+     "sd_ratio": 2.03,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.84,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.47,
+     "rmse": 3.62,
+     "crmse": null,
+     "bias": 1.75,
+     "corr": 0.21,
+     "sd_ratio": 1.05,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.01,
+     "rmse": 2.48,
+     "crmse": null,
+     "bias": -0.67,
+     "corr": 0.59,
+     "sd_ratio": 1.14,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.9,
+     "rmse": 2.22,
+     "crmse": null,
+     "bias": 1.15,
+     "corr": 0.76,
+     "sd_ratio": 1.17,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.96,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 1.08,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "min": {
+    "ACCESS-CM2": {
+     "nrmse": 0.92,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.85,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 2.06,
+     "rmse": 15.14,
+     "crmse": null,
+     "bias": 9.47,
+     "corr": -0.367,
+     "sd_ratio": 0.95,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 1.02,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 1.04,
+     "rmse": 7.66,
+     "crmse": null,
+     "bias": 1.33,
+     "corr": 0.29,
+     "sd_ratio": 0.67,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 1.21,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": 0.037,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 1.43,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": -0.019,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 1.32,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": 0.023,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 1.49,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": -0.119,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 1.23,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": 0.04,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.98,
+     "rmse": 7.21,
+     "crmse": null,
+     "bias": 5.18,
+     "corr": 0.76,
+     "sd_ratio": 0.55,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.31,
+     "rmse": 16.95,
+     "crmse": null,
+     "bias": 13.63,
+     "corr": -0.379,
+     "sd_ratio": 0.64,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 2.13,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": -0.315,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 2.08,
+     "rmse": 15.26,
+     "crmse": null,
+     "bias": 7.11,
+     "corr": -0.388,
+     "sd_ratio": 1.21,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 1.1,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 0.97,
+     "rmse": 7.09,
+     "crmse": null,
+     "bias": 3.71,
+     "corr": 0.59,
+     "sd_ratio": 0.74,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.27,
+     "rmse": 9.29,
+     "crmse": null,
+     "bias": 4.96,
+     "corr": 0.088,
+     "sd_ratio": 0.48,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.5,
+     "rmse": 11.03,
+     "crmse": null,
+     "bias": 6.86,
+     "corr": -0.021,
+     "sd_ratio": 0.6,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 1.61,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": -0.144,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 1.07,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.16,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   }
+  },
+  "June": {
+   "mean": {
+    "ACCESS-CM2": {
+     "nrmse": 0.42,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.34,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.25,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.34,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.29,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.31,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.32,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.5,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.88,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.33,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.26,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 0.7,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.33,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.7,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.11,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.24,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.31,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.52,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.57,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p5": {
+    "ACCESS-CM2": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 0.74,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.58,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.73,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.57,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.68,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.65,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.52,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.6,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.47,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.03,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.59,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.1,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.03,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.41,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.58,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 1.02,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.96,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p1": {
+    "ACCESS-CM2": {
+     "nrmse": 0.76,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.52,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 0.72,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.79,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.63,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.75,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.76,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.8,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.97,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.76,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.67,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.18,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.85,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.4,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 0.94,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.56,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 1.21,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.27,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "min": {
+    "ACCESS-CM2": {
+     "nrmse": 1.0,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.88,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.41,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 1.22,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 1.21,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.97,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 1.28,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 1.23,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 1.28,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 1.3,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 1.0,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 1.58,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.51,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.72,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 1.19,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.41,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.07,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.21,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 1.1,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 1.46,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.35,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   }
+  },
+  "July": {
+   "mean": {
+    "ACCESS-CM2": {
+     "nrmse": 0.4,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.36,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.07,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.45,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.4,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.79,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.36,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.34,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.36,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.57,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.5,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.6,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 0.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.5,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.88,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 0.7,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.51,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.57,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.35,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.94,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p5": {
+    "ACCESS-CM2": {
+     "nrmse": 0.51,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.04,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.49,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.26,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.79,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.35,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.41,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.38,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.51,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.74,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 1.32,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.15,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 0.8,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.57,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.46,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.52,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.5,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.14,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p1": {
+    "ACCESS-CM2": {
+     "nrmse": 0.67,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 1.11,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.46,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.49,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.84,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.65,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.7,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.99,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.11,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.89,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.42,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.53,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 0.64,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.11,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "min": {
+    "ACCESS-CM2": {
+     "nrmse": 1.08,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.84,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.89,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 1.09,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 1.1,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 1.29,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 1.39,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 1.26,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 1.32,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 1.13,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 1.15,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 2.28,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.92,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.97,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.14,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.16,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.24,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 1.55,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 1.06,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.07,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   }
+  },
+  "August": {
+   "mean": {
+    "ACCESS-CM2": {
+     "nrmse": 0.72,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 1.04,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 1.74,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.66,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.55,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 1.43,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.62,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.59,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.47,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.68,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.69,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 0.54,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 0.43,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 0.67,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 1.03,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 2.71,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.39,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 0.93,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.91,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.54,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.84,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p5": {
+    "ACCESS-CM2": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 1.53,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 2.15,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.61,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.47,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.99,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 0.47,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.49,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 0.54,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 0.72,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 1.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.35,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.7,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 1.2,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 2.09,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.22,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.19,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 0.89,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.63,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.83,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "p1": {
+    "ACCESS-CM2": {
+     "nrmse": 0.7,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.8,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 2.32,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.79,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.86,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 0.8,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 1.1,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 0.88,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 1.18,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 1.06,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.73,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.33,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.99,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 2.09,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.82,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.47,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.2,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.56,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 1.3,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.73,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 0.99,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   },
+   "min": {
+    "ACCESS-CM2": {
+     "nrmse": 0.85,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "ACCESS-ESM1-5": {
+     "nrmse": 0.81,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "AWI-ESM-1-REcoM": {
+     "nrmse": 2.0,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-CM2-SR5": {
+     "nrmse": 0.96,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CMCC-ESM2": {
+     "nrmse": 0.96,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "CanESM5": {
+     "nrmse": 1.07,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3": {
+     "nrmse": 1.27,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg": {
+     "nrmse": 1.11,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "EC-Earth3-Veg-LR": {
+     "nrmse": 1.35,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "GFDL-ESM4": {
+     "nrmse": 1.11,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IITM-ESM": {
+     "nrmse": 0.89,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM4-8": {
+     "nrmse": 2.12,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "INM-CM5-0": {
+     "nrmse": 1.92,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "IPSL-CM6A-LR": {
+     "nrmse": 1.91,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KACE-1-0-G": {
+     "nrmse": 0.99,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "KIOST-ESM": {
+     "nrmse": 1.02,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MIROC6": {
+     "nrmse": 1.29,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-HR": {
+     "nrmse": 1.59,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MPI-ESM1-2-LR": {
+     "nrmse": 1.48,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "MRI-ESM2-0": {
+     "nrmse": 0.86,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    },
+    "NESM3": {
+     "nrmse": 1.34,
+     "rmse": null,
+     "crmse": null,
+     "bias": null,
+     "corr": null,
+     "sd_ratio": null,
+     "sd_mod": null
+    }
+   }
+  }
+ },
+ "rankings": {
+  "Entire": {
+   "ACCESS-CM2": {
+    "mean_nrmse": 0.784,
+    "mean_rank": 16,
+    "ext_nrmse": 0.577,
+    "ext_rank": 3,
+    "overall_nrmse": 0.6805,
+    "overall_rank": 10,
+    "ranksum_rank": 9
+   },
+   "ACCESS-ESM1-5": {
+    "mean_nrmse": 0.526,
+    "mean_rank": 7,
+    "ext_nrmse": 0.692,
+    "ext_rank": 5,
+    "overall_nrmse": 0.609,
+    "overall_rank": 5,
+    "ranksum_rank": 2
+   },
+   "AWI-ESM-1-REcoM": {
+    "mean_nrmse": 0.55,
+    "mean_rank": 10,
+    "ext_nrmse": 1.18,
+    "ext_rank": 19,
+    "overall_nrmse": 0.865,
+    "overall_rank": 17,
+    "ranksum_rank": 16
+   },
+   "CMCC-CM2-SR5": {
+    "mean_nrmse": 0.679,
+    "mean_rank": 15,
+    "ext_nrmse": 0.515,
+    "ext_rank": 2,
+    "overall_nrmse": 0.597,
+    "overall_rank": 3,
+    "ranksum_rank": 6
+   },
+   "CMCC-ESM2": {
+    "mean_nrmse": 0.676,
+    "mean_rank": 14,
+    "ext_nrmse": 0.45,
+    "ext_rank": 1,
+    "overall_nrmse": 0.563,
+    "overall_rank": 2,
+    "ranksum_rank": 5
+   },
+   "CanESM5": {
+    "mean_nrmse": 0.544,
+    "mean_rank": 9,
+    "ext_nrmse": 0.872,
+    "ext_rank": 15,
+    "overall_nrmse": 0.708,
+    "overall_rank": 11,
+    "ranksum_rank": 13
+   },
+   "EC-Earth3": {
+    "mean_nrmse": 0.493,
+    "mean_rank": 6,
+    "ext_nrmse": 0.833,
+    "ext_rank": 13,
+    "overall_nrmse": 0.663,
+    "overall_rank": 9,
+    "ranksum_rank": 9
+   },
+   "EC-Earth3-Veg": {
+    "mean_nrmse": 0.429,
+    "mean_rank": 2,
+    "ext_nrmse": 0.79,
+    "ext_rank": 10,
+    "overall_nrmse": 0.6095,
+    "overall_rank": 6,
+    "ranksum_rank": 2
+   },
+   "EC-Earth3-Veg-LR": {
+    "mean_nrmse": 0.449,
+    "mean_rank": 5,
+    "ext_nrmse": 0.832,
+    "ext_rank": 12,
+    "overall_nrmse": 0.6405,
+    "overall_rank": 7,
+    "ranksum_rank": 6
+   },
+   "GFDL-ESM4": {
+    "mean_nrmse": 0.43,
+    "mean_rank": 4,
+    "ext_nrmse": 0.78,
+    "ext_rank": 8,
+    "overall_nrmse": 0.605,
+    "overall_rank": 4,
+    "ranksum_rank": 2
+   },
+   "IITM-ESM": {
+    "mean_nrmse": 2.074,
+    "mean_rank": 20,
+    "ext_nrmse": 0.788,
+    "ext_rank": 9,
+    "overall_nrmse": 1.431,
+    "overall_rank": 20,
+    "ranksum_rank": 16
+   },
+   "INM-CM4-8": {
+    "mean_nrmse": 0.54,
+    "mean_rank": 8,
+    "ext_nrmse": 1.185,
+    "ext_rank": 20,
+    "overall_nrmse": 0.8625,
+    "overall_rank": 16,
+    "ranksum_rank": 15
+   },
+   "INM-CM5-0": {
+    "mean_nrmse": 0.625,
+    "mean_rank": 12,
+    "ext_nrmse": 1.012,
+    "ext_rank": 18,
+    "overall_nrmse": 0.8185,
+    "overall_rank": 15,
+    "ranksum_rank": 18
+   },
+   "IPSL-CM6A-LR": {
+    "mean_nrmse": 1.235,
+    "mean_rank": 18,
+    "ext_nrmse": 1.397,
+    "ext_rank": 21,
+    "overall_nrmse": 1.316,
+    "overall_rank": 19,
+    "ranksum_rank": 21
+   },
+   "KACE-1-0-G": {
+    "mean_nrmse": 0.885,
+    "mean_rank": 17,
+    "ext_nrmse": 0.675,
+    "ext_rank": 4,
+    "overall_nrmse": 0.78,
+    "overall_rank": 14,
+    "ranksum_rank": 12
+   },
+   "KIOST-ESM": {
+    "mean_nrmse": 2.558,
+    "mean_rank": 21,
+    "ext_nrmse": 0.985,
+    "ext_rank": 17,
+    "overall_nrmse": 1.7715,
+    "overall_rank": 21,
+    "ranksum_rank": 20
+   },
+   "MIROC6": {
+    "mean_nrmse": 1.625,
+    "mean_rank": 19,
+    "ext_nrmse": 0.823,
+    "ext_rank": 11,
+    "overall_nrmse": 1.224,
+    "overall_rank": 18,
+    "ranksum_rank": 18
+   },
+   "MPI-ESM1-2-HR": {
+    "mean_nrmse": 0.319,
+    "mean_rank": 1,
+    "ext_nrmse": 0.77,
+    "ext_rank": 6,
+    "overall_nrmse": 0.5445,
+    "overall_rank": 1,
+    "ranksum_rank": 1
+   },
+   "MPI-ESM1-2-LR": {
+    "mean_nrmse": 0.43,
+    "mean_rank": 3,
+    "ext_nrmse": 0.872,
+    "ext_rank": 14,
+    "overall_nrmse": 0.651,
+    "overall_rank": 8,
+    "ranksum_rank": 6
+   },
+   "MRI-ESM2-0": {
+    "mean_nrmse": 0.664,
+    "mean_rank": 13,
+    "ext_nrmse": 0.772,
+    "ext_rank": 7,
+    "overall_nrmse": 0.718,
+    "overall_rank": 12,
+    "ranksum_rank": 11
+   },
+   "NESM3": {
+    "mean_nrmse": 0.551,
+    "mean_rank": 11,
+    "ext_nrmse": 0.951,
+    "ext_rank": 16,
+    "overall_nrmse": 0.751,
+    "overall_rank": 13,
+    "ranksum_rank": 14
+   }
+  },
+  "JJA": {
+   "ACCESS-CM2": {
+    "mean_nrmse": 0.467,
+    "mean_rank": 9,
+    "ext_nrmse": 0.783,
+    "ext_rank": 3,
+    "overall_nrmse": 0.625,
+    "overall_rank": 4,
+    "ranksum_rank": 4
+   },
+   "ACCESS-ESM1-5": {
+    "mean_nrmse": 0.441,
+    "mean_rank": 8,
+    "ext_nrmse": 0.985,
+    "ext_rank": 12,
+    "overall_nrmse": 0.713,
+    "overall_rank": 10,
+    "ranksum_rank": 10
+   },
+   "AWI-ESM-1-REcoM": {
+    "mean_nrmse": 1.096,
+    "mean_rank": 20,
+    "ext_nrmse": 1.701,
+    "ext_rank": 20,
+    "overall_nrmse": 1.3985,
+    "overall_rank": 20,
+    "ranksum_rank": 21
+   },
+   "CMCC-CM2-SR5": {
+    "mean_nrmse": 0.364,
+    "mean_rank": 4,
+    "ext_nrmse": 0.736,
+    "ext_rank": 2,
+    "overall_nrmse": 0.55,
+    "overall_rank": 2,
+    "ranksum_rank": 2
+   },
+   "CMCC-ESM2": {
+    "mean_nrmse": 0.358,
+    "mean_rank": 3,
+    "ext_nrmse": 0.662,
+    "ext_rank": 1,
+    "overall_nrmse": 0.51,
+    "overall_rank": 1,
+    "ranksum_rank": 1
+   },
+   "CanESM5": {
+    "mean_nrmse": 0.885,
+    "mean_rank": 18,
+    "ext_nrmse": 1.012,
+    "ext_rank": 14,
+    "overall_nrmse": 0.9485,
+    "overall_rank": 15,
+    "ranksum_rank": 16
+   },
+   "EC-Earth3": {
+    "mean_nrmse": 0.381,
+    "mean_rank": 6,
+    "ext_nrmse": 0.901,
+    "ext_rank": 7,
+    "overall_nrmse": 0.641,
+    "overall_rank": 5,
+    "ranksum_rank": 6
+   },
+   "EC-Earth3-Veg": {
+    "mean_nrmse": 0.34,
+    "mean_rank": 1,
+    "ext_nrmse": 0.872,
+    "ext_rank": 6,
+    "overall_nrmse": 0.606,
+    "overall_rank": 3,
+    "ranksum_rank": 3
+   },
+   "EC-Earth3-Veg-LR": {
+    "mean_nrmse": 0.346,
+    "mean_rank": 2,
+    "ext_nrmse": 0.964,
+    "ext_rank": 10,
+    "overall_nrmse": 0.655,
+    "overall_rank": 6,
+    "ranksum_rank": 4
+   },
+   "GFDL-ESM4": {
+    "mean_nrmse": 0.559,
+    "mean_rank": 15,
+    "ext_nrmse": 0.801,
+    "ext_rank": 4,
+    "overall_nrmse": 0.68,
+    "overall_rank": 7,
+    "ranksum_rank": 9
+   },
+   "IITM-ESM": {
+    "mean_nrmse": 0.622,
+    "mean_rank": 16,
+    "ext_nrmse": 0.834,
+    "ext_rank": 5,
+    "overall_nrmse": 0.728,
+    "overall_rank": 12,
+    "ranksum_rank": 11
+   },
+   "INM-CM4-8": {
+    "mean_nrmse": 0.494,
+    "mean_rank": 11,
+    "ext_nrmse": 1.944,
+    "ext_rank": 21,
+    "overall_nrmse": 1.219,
+    "overall_rank": 19,
+    "ranksum_rank": 16
+   },
+   "INM-CM5-0": {
+    "mean_nrmse": 0.392,
+    "mean_rank": 7,
+    "ext_nrmse": 1.65,
+    "ext_rank": 18,
+    "overall_nrmse": 1.021,
+    "overall_rank": 16,
+    "ranksum_rank": 13
+   },
+   "IPSL-CM6A-LR": {
+    "mean_nrmse": 0.557,
+    "mean_rank": 14,
+    "ext_nrmse": 1.672,
+    "ext_rank": 19,
+    "overall_nrmse": 1.1145,
+    "overall_rank": 18,
+    "ranksum_rank": 18
+   },
+   "KACE-1-0-G": {
+    "mean_nrmse": 0.508,
+    "mean_rank": 12,
+    "ext_nrmse": 0.932,
+    "ext_rank": 9,
+    "overall_nrmse": 0.72,
+    "overall_rank": 11,
+    "ranksum_rank": 11
+   },
+   "KIOST-ESM": {
+    "mean_nrmse": 2.108,
+    "mean_rank": 21,
+    "ext_nrmse": 1.298,
+    "ext_rank": 17,
+    "overall_nrmse": 1.703,
+    "overall_rank": 21,
+    "ranksum_rank": 20
+   },
+   "MIROC6": {
+    "mean_nrmse": 1.037,
+    "mean_rank": 19,
+    "ext_nrmse": 1.081,
+    "ext_rank": 16,
+    "overall_nrmse": 1.059,
+    "overall_rank": 17,
+    "ranksum_rank": 19
+   },
+   "MPI-ESM1-2-HR": {
+    "mean_nrmse": 0.471,
+    "mean_rank": 10,
+    "ext_nrmse": 0.903,
+    "ext_rank": 8,
+    "overall_nrmse": 0.687,
+    "overall_rank": 9,
+    "ranksum_rank": 7
+   },
+   "MPI-ESM1-2-LR": {
+    "mean_nrmse": 0.545,
+    "mean_rank": 13,
+    "ext_nrmse": 1.023,
+    "ext_rank": 15,
+    "overall_nrmse": 0.784,
+    "overall_rank": 13,
+    "ranksum_rank": 14
+   },
+   "MRI-ESM2-0": {
+    "mean_nrmse": 0.375,
+    "mean_rank": 5,
+    "ext_nrmse": 0.992,
+    "ext_rank": 13,
+    "overall_nrmse": 0.6835,
+    "overall_rank": 8,
+    "ranksum_rank": 7
+   },
+   "NESM3": {
+    "mean_nrmse": 0.788,
+    "mean_rank": 17,
+    "ext_nrmse": 0.972,
+    "ext_rank": 11,
+    "overall_nrmse": 0.88,
+    "overall_rank": 14,
+    "ranksum_rank": 14
+   }
+  },
+  "June": {
+   "ACCESS-CM2": {
+    "mean_nrmse": 0.417,
+    "mean_rank": 12,
+    "ext_nrmse": 0.789,
+    "ext_rank": 6,
+    "overall_nrmse": 0.603,
+    "overall_rank": 8,
+    "ranksum_rank": 9
+   },
+   "ACCESS-ESM1-5": {
+    "mean_nrmse": 0.34,
+    "mean_rank": 10,
+    "ext_nrmse": 0.63,
+    "ext_rank": 1,
+    "overall_nrmse": 0.485,
+    "overall_rank": 2,
+    "ranksum_rank": 4
+   },
+   "AWI-ESM-1-REcoM": {
+    "mean_nrmse": 0.644,
+    "mean_rank": 17,
+    "ext_nrmse": 0.956,
+    "ext_rank": 14,
+    "overall_nrmse": 0.8,
+    "overall_rank": 16,
+    "ranksum_rank": 16
+   },
+   "CMCC-CM2-SR5": {
+    "mean_nrmse": 0.25,
+    "mean_rank": 2,
+    "ext_nrmse": 0.864,
+    "ext_rank": 8,
+    "overall_nrmse": 0.557,
+    "overall_rank": 4,
+    "ranksum_rank": 3
+   },
+   "CMCC-ESM2": {
+    "mean_nrmse": 0.343,
+    "mean_rank": 11,
+    "ext_nrmse": 0.772,
+    "ext_rank": 5,
+    "overall_nrmse": 0.5575,
+    "overall_rank": 5,
+    "ranksum_rank": 7
+   },
+   "CanESM5": {
+    "mean_nrmse": 0.613,
+    "mean_rank": 16,
+    "ext_nrmse": 0.818,
+    "ext_rank": 7,
+    "overall_nrmse": 0.7155,
+    "overall_rank": 14,
+    "ranksum_rank": 13
+   },
+   "EC-Earth3": {
+    "mean_nrmse": 0.292,
+    "mean_rank": 4,
+    "ext_nrmse": 0.871,
+    "ext_rank": 9,
+    "overall_nrmse": 0.5815,
+    "overall_rank": 7,
+    "ranksum_rank": 5
+   },
+   "EC-Earth3-Veg": {
+    "mean_nrmse": 0.308,
+    "mean_rank": 5,
+    "ext_nrmse": 0.9,
+    "ext_rank": 12,
+    "overall_nrmse": 0.604,
+    "overall_rank": 10,
+    "ranksum_rank": 8
+   },
+   "EC-Earth3-Veg-LR": {
+    "mean_nrmse": 0.324,
+    "mean_rank": 7,
+    "ext_nrmse": 0.978,
+    "ext_rank": 15,
+    "overall_nrmse": 0.651,
+    "overall_rank": 11,
+    "ranksum_rank": 12
+   },
+   "GFDL-ESM4": {
+    "mean_nrmse": 0.501,
+    "mean_rank": 13,
+    "ext_nrmse": 0.922,
+    "ext_rank": 13,
+    "overall_nrmse": 0.7115,
+    "overall_rank": 13,
+    "ranksum_rank": 15
+   },
+   "IITM-ESM": {
+    "mean_nrmse": 0.88,
+    "mean_rank": 19,
+    "ext_nrmse": 0.666,
+    "ext_rank": 2,
+    "overall_nrmse": 0.773,
+    "overall_rank": 15,
+    "ranksum_rank": 11
+   },
+   "INM-CM4-8": {
+    "mean_nrmse": 0.335,
+    "mean_rank": 9,
+    "ext_nrmse": 0.981,
+    "ext_rank": 16,
+    "overall_nrmse": 0.658,
+    "overall_rank": 12,
+    "ranksum_rank": 14
+   },
+   "INM-CM5-0": {
+    "mean_nrmse": 0.262,
+    "mean_rank": 3,
+    "ext_nrmse": 0.882,
+    "ext_rank": 11,
+    "overall_nrmse": 0.572,
+    "overall_rank": 6,
+    "ranksum_rank": 6
+   },
+   "IPSL-CM6A-LR": {
+    "mean_nrmse": 0.702,
+    "mean_rank": 18,
+    "ext_nrmse": 1.311,
+    "ext_rank": 21,
+    "overall_nrmse": 1.0065,
+    "overall_rank": 19,
+    "ranksum_rank": 20
+   },
+   "KACE-1-0-G": {
+    "mean_nrmse": 0.33,
+    "mean_rank": 8,
+    "ext_nrmse": 0.876,
+    "ext_rank": 10,
+    "overall_nrmse": 0.603,
+    "overall_rank": 8,
+    "ranksum_rank": 9
+   },
+   "KIOST-ESM": {
+    "mean_nrmse": 1.698,
+    "mean_rank": 21,
+    "ext_nrmse": 1.303,
+    "ext_rank": 20,
+    "overall_nrmse": 1.5005,
+    "overall_rank": 21,
+    "ranksum_rank": 21
+   },
+   "MIROC6": {
+    "mean_nrmse": 1.108,
+    "mean_rank": 20,
+    "ext_nrmse": 1.01,
+    "ext_rank": 17,
+    "overall_nrmse": 1.059,
+    "overall_rank": 20,
+    "ranksum_rank": 19
+   },
+   "MPI-ESM1-2-HR": {
+    "mean_nrmse": 0.243,
+    "mean_rank": 1,
+    "ext_nrmse": 0.723,
+    "ext_rank": 3,
+    "overall_nrmse": 0.483,
+    "overall_rank": 1,
+    "ranksum_rank": 1
+   },
+   "MPI-ESM1-2-LR": {
+    "mean_nrmse": 0.308,
+    "mean_rank": 5,
+    "ext_nrmse": 0.764,
+    "ext_rank": 4,
+    "overall_nrmse": 0.536,
+    "overall_rank": 3,
+    "ranksum_rank": 2
+   },
+   "MRI-ESM2-0": {
+    "mean_nrmse": 0.523,
+    "mean_rank": 14,
+    "ext_nrmse": 1.229,
+    "ext_rank": 19,
+    "overall_nrmse": 0.876,
+    "overall_rank": 17,
+    "ranksum_rank": 17
+   },
+   "NESM3": {
+    "mean_nrmse": 0.572,
+    "mean_rank": 15,
+    "ext_nrmse": 1.191,
+    "ext_rank": 18,
+    "overall_nrmse": 0.8815,
+    "overall_rank": 18,
+    "ranksum_rank": 17
+   }
+  },
+  "July": {
+   "ACCESS-CM2": {
+    "mean_nrmse": 0.403,
+    "mean_rank": 7,
+    "ext_nrmse": 0.752,
+    "ext_rank": 5,
+    "overall_nrmse": 0.5775,
+    "overall_rank": 5,
+    "ranksum_rank": 4
+   },
+   "ACCESS-ESM1-5": {
+    "mean_nrmse": 0.356,
+    "mean_rank": 3,
+    "ext_nrmse": 0.918,
+    "ext_rank": 12,
+    "overall_nrmse": 0.637,
+    "overall_rank": 9,
+    "ranksum_rank": 8
+   },
+   "AWI-ESM-1-REcoM": {
+    "mean_nrmse": 1.069,
+    "mean_rank": 20,
+    "ext_nrmse": 1.466,
+    "ext_rank": 19,
+    "overall_nrmse": 1.2675,
+    "overall_rank": 19,
+    "ranksum_rank": 21
+   },
+   "CMCC-CM2-SR5": {
+    "mean_nrmse": 0.454,
+    "mean_rank": 8,
+    "ext_nrmse": 0.74,
+    "ext_rank": 4,
+    "overall_nrmse": 0.597,
+    "overall_rank": 7,
+    "ranksum_rank": 4
+   },
+   "CMCC-ESM2": {
+    "mean_nrmse": 0.4,
+    "mean_rank": 6,
+    "ext_nrmse": 0.616,
+    "ext_rank": 1,
+    "overall_nrmse": 0.508,
+    "overall_rank": 1,
+    "ranksum_rank": 2
+   },
+   "CanESM5": {
+    "mean_nrmse": 0.786,
+    "mean_rank": 18,
+    "ext_nrmse": 0.975,
+    "ext_rank": 15,
+    "overall_nrmse": 0.8805,
+    "overall_rank": 15,
+    "ranksum_rank": 16
+   },
+   "EC-Earth3": {
+    "mean_nrmse": 0.358,
+    "mean_rank": 4,
+    "ext_nrmse": 0.794,
+    "ext_rank": 9,
+    "overall_nrmse": 0.576,
+    "overall_rank": 4,
+    "ranksum_rank": 6
+   },
+   "EC-Earth3-Veg": {
+    "mean_nrmse": 0.341,
+    "mean_rank": 1,
+    "ext_nrmse": 0.772,
+    "ext_rank": 7,
+    "overall_nrmse": 0.5565,
+    "overall_rank": 3,
+    "ranksum_rank": 3
+   },
+   "EC-Earth3-Veg-LR": {
+    "mean_nrmse": 0.361,
+    "mean_rank": 5,
+    "ext_nrmse": 0.801,
+    "ext_rank": 10,
+    "overall_nrmse": 0.581,
+    "overall_rank": 6,
+    "ranksum_rank": 8
+   },
+   "GFDL-ESM4": {
+    "mean_nrmse": 0.566,
+    "mean_rank": 13,
+    "ext_nrmse": 0.767,
+    "ext_rank": 6,
+    "overall_nrmse": 0.6665,
+    "overall_rank": 11,
+    "ranksum_rank": 10
+   },
+   "IITM-ESM": {
+    "mean_nrmse": 0.502,
+    "mean_rank": 11,
+    "ext_nrmse": 0.962,
+    "ext_rank": 13,
+    "overall_nrmse": 0.732,
+    "overall_rank": 12,
+    "ranksum_rank": 12
+   },
+   "INM-CM4-8": {
+    "mean_nrmse": 0.639,
+    "mean_rank": 16,
+    "ext_nrmse": 1.972,
+    "ext_rank": 21,
+    "overall_nrmse": 1.3055,
+    "overall_rank": 20,
+    "ranksum_rank": 19
+   },
+   "INM-CM5-0": {
+    "mean_nrmse": 0.597,
+    "mean_rank": 15,
+    "ext_nrmse": 1.774,
+    "ext_rank": 20,
+    "overall_nrmse": 1.1855,
+    "overall_rank": 18,
+    "ranksum_rank": 17
+   },
+   "IPSL-CM6A-LR": {
+    "mean_nrmse": 0.484,
+    "mean_rank": 9,
+    "ext_nrmse": 1.378,
+    "ext_rank": 17,
+    "overall_nrmse": 0.931,
+    "overall_rank": 16,
+    "ranksum_rank": 13
+   },
+   "KACE-1-0-G": {
+    "mean_nrmse": 0.498,
+    "mean_rank": 10,
+    "ext_nrmse": 0.736,
+    "ext_rank": 3,
+    "overall_nrmse": 0.617,
+    "overall_rank": 8,
+    "ranksum_rank": 6
+   },
+   "KIOST-ESM": {
+    "mean_nrmse": 1.882,
+    "mean_rank": 21,
+    "ext_nrmse": 1.378,
+    "ext_rank": 17,
+    "overall_nrmse": 1.63,
+    "overall_rank": 21,
+    "ranksum_rank": 20
+   },
+   "MIROC6": {
+    "mean_nrmse": 0.703,
+    "mean_rank": 17,
+    "ext_nrmse": 0.813,
+    "ext_rank": 11,
+    "overall_nrmse": 0.758,
+    "overall_rank": 13,
+    "ranksum_rank": 15
+   },
+   "MPI-ESM1-2-HR": {
+    "mean_nrmse": 0.507,
+    "mean_rank": 12,
+    "ext_nrmse": 0.79,
+    "ext_rank": 8,
+    "overall_nrmse": 0.6485,
+    "overall_rank": 10,
+    "ranksum_rank": 11
+   },
+   "MPI-ESM1-2-LR": {
+    "mean_nrmse": 0.571,
+    "mean_rank": 14,
+    "ext_nrmse": 0.962,
+    "ext_rank": 13,
+    "overall_nrmse": 0.7665,
+    "overall_rank": 14,
+    "ranksum_rank": 14
+   },
+   "MRI-ESM2-0": {
+    "mean_nrmse": 0.352,
+    "mean_rank": 2,
+    "ext_nrmse": 0.725,
+    "ext_rank": 2,
+    "overall_nrmse": 0.5385,
+    "overall_rank": 2,
+    "ranksum_rank": 1
+   },
+   "NESM3": {
+    "mean_nrmse": 0.94,
+    "mean_rank": 19,
+    "ext_nrmse": 1.108,
+    "ext_rank": 16,
+    "overall_nrmse": 1.024,
+    "overall_rank": 17,
+    "ranksum_rank": 17
+   }
+  },
+  "August": {
+   "ACCESS-CM2": {
+    "mean_nrmse": 0.716,
+    "mean_rank": 12,
+    "ext_nrmse": 0.786,
+    "ext_rank": 3,
+    "overall_nrmse": 0.751,
+    "overall_rank": 6,
+    "ranksum_rank": 7
+   },
+   "ACCESS-ESM1-5": {
+    "mean_nrmse": 1.037,
+    "mean_rank": 17,
+    "ext_nrmse": 1.047,
+    "ext_rank": 12,
+    "overall_nrmse": 1.042,
+    "overall_rank": 12,
+    "ranksum_rank": 17
+   },
+   "AWI-ESM-1-REcoM": {
+    "mean_nrmse": 1.743,
+    "mean_rank": 20,
+    "ext_nrmse": 2.16,
+    "ext_rank": 21,
+    "overall_nrmse": 1.9515,
+    "overall_rank": 20,
+    "ranksum_rank": 21
+   },
+   "CMCC-CM2-SR5": {
+    "mean_nrmse": 0.661,
+    "mean_rank": 8,
+    "ext_nrmse": 0.787,
+    "ext_rank": 4,
+    "overall_nrmse": 0.724,
+    "overall_rank": 4,
+    "ranksum_rank": 3
+   },
+   "CMCC-ESM2": {
+    "mean_nrmse": 0.547,
+    "mean_rank": 5,
+    "ext_nrmse": 0.763,
+    "ext_rank": 2,
+    "overall_nrmse": 0.655,
+    "overall_rank": 2,
+    "ranksum_rank": 2
+   },
+   "CanESM5": {
+    "mean_nrmse": 1.433,
+    "mean_rank": 19,
+    "ext_nrmse": 0.952,
+    "ext_rank": 8,
+    "overall_nrmse": 1.1925,
+    "overall_rank": 16,
+    "ranksum_rank": 14
+   },
+   "EC-Earth3": {
+    "mean_nrmse": 0.624,
+    "mean_rank": 7,
+    "ext_nrmse": 0.947,
+    "ext_rank": 7,
+    "overall_nrmse": 0.7855,
+    "overall_rank": 8,
+    "ranksum_rank": 6
+   },
+   "EC-Earth3-Veg": {
+    "mean_nrmse": 0.586,
+    "mean_rank": 6,
+    "ext_nrmse": 0.828,
+    "ext_rank": 6,
+    "overall_nrmse": 0.707,
+    "overall_rank": 3,
+    "ranksum_rank": 3
+   },
+   "EC-Earth3-Veg-LR": {
+    "mean_nrmse": 0.468,
+    "mean_rank": 2,
+    "ext_nrmse": 1.022,
+    "ext_rank": 11,
+    "overall_nrmse": 0.745,
+    "overall_rank": 5,
+    "ranksum_rank": 5
+   },
+   "GFDL-ESM4": {
+    "mean_nrmse": 0.683,
+    "mean_rank": 10,
+    "ext_nrmse": 0.966,
+    "ext_rank": 9,
+    "overall_nrmse": 0.8245,
+    "overall_rank": 9,
+    "ranksum_rank": 9
+   },
+   "IITM-ESM": {
+    "mean_nrmse": 0.694,
+    "mean_rank": 11,
+    "ext_nrmse": 0.812,
+    "ext_rank": 5,
+    "overall_nrmse": 0.753,
+    "overall_rank": 7,
+    "ranksum_rank": 8
+   },
+   "INM-CM4-8": {
+    "mean_nrmse": 0.544,
+    "mean_rank": 4,
+    "ext_nrmse": 2.09,
+    "ext_rank": 20,
+    "overall_nrmse": 1.317,
+    "overall_rank": 19,
+    "ranksum_rank": 11
+   },
+   "INM-CM5-0": {
+    "mean_nrmse": 0.426,
+    "mean_rank": 1,
+    "ext_nrmse": 1.754,
+    "ext_rank": 18,
+    "overall_nrmse": 1.09,
+    "overall_rank": 14,
+    "ranksum_rank": 9
+   },
+   "IPSL-CM6A-LR": {
+    "mean_nrmse": 0.669,
+    "mean_rank": 9,
+    "ext_nrmse": 1.9,
+    "ext_rank": 19,
+    "overall_nrmse": 1.2845,
+    "overall_rank": 17,
+    "ranksum_rank": 15
+   },
+   "KACE-1-0-G": {
+    "mean_nrmse": 1.03,
+    "mean_rank": 16,
+    "ext_nrmse": 1.007,
+    "ext_rank": 10,
+    "overall_nrmse": 1.0185,
+    "overall_rank": 11,
+    "ranksum_rank": 12
+   },
+   "KIOST-ESM": {
+    "mean_nrmse": 2.71,
+    "mean_rank": 21,
+    "ext_nrmse": 1.525,
+    "ext_rank": 17,
+    "overall_nrmse": 2.1175,
+    "overall_rank": 21,
+    "ranksum_rank": 20
+   },
+   "MIROC6": {
+    "mean_nrmse": 1.388,
+    "mean_rank": 18,
+    "ext_nrmse": 1.238,
+    "ext_rank": 15,
+    "overall_nrmse": 1.313,
+    "overall_rank": 18,
+    "ranksum_rank": 19
+   },
+   "MPI-ESM1-2-HR": {
+    "mean_nrmse": 0.928,
+    "mean_rank": 15,
+    "ext_nrmse": 1.448,
+    "ext_rank": 16,
+    "overall_nrmse": 1.188,
+    "overall_rank": 15,
+    "ranksum_rank": 18
+   },
+   "MPI-ESM1-2-LR": {
+    "mean_nrmse": 0.909,
+    "mean_rank": 14,
+    "ext_nrmse": 1.223,
+    "ext_rank": 14,
+    "overall_nrmse": 1.066,
+    "overall_rank": 13,
+    "ranksum_rank": 15
+   },
+   "MRI-ESM2-0": {
+    "mean_nrmse": 0.54,
+    "mean_rank": 3,
+    "ext_nrmse": 0.739,
+    "ext_rank": 1,
+    "overall_nrmse": 0.6395,
+    "overall_rank": 1,
+    "ranksum_rank": 1
+   },
+   "NESM3": {
+    "mean_nrmse": 0.836,
+    "mean_rank": 13,
+    "ext_nrmse": 1.05,
+    "ext_rank": 13,
+    "overall_nrmse": 0.943,
+    "overall_rank": 10,
+    "ranksum_rank": 12
+   }
+  }
+ },
+ "summary": {
+  "Entire": {
+   "spearman_mean_vs_ext": {
+    "rho": -0.02,
+    "p": 0.9298
+   },
+   "median": {
+    "mean": {
+     "nrmse": 0.551,
+     "corr": 0.931,
+     "bias": 0.35,
+     "sd_ratio": 1.26
+    },
+    "p5": {
+     "nrmse": 0.603,
+     "corr": 0.936,
+     "bias": -0.8,
+     "sd_ratio": 1.14
+    },
+    "p1": {
+     "nrmse": 0.656,
+     "corr": 0.946,
+     "bias": -0.97,
+     "sd_ratio": 1.28
+    },
+    "min": {
+     "nrmse": 1.15,
+     "corr": 0.443,
+     "bias": 4.53,
+     "sd_ratio": 1.0
+    }
+   }
+  },
+  "JJA": {
+   "spearman_mean_vs_ext": {
+    "rho": 0.483,
+    "p": 0.0265
+   },
+   "median": {
+    "mean": {
+     "nrmse": 0.494,
+     "corr": 0.934,
+     "bias": 0.21,
+     "sd_ratio": 1.04
+    },
+    "p5": {
+     "nrmse": 0.828,
+     "corr": 0.938,
+     "bias": -0.465,
+     "sd_ratio": 1.0
+    },
+    "p1": {
+     "nrmse": 0.902,
+     "corr": 0.7,
+     "bias": 0.135,
+     "sd_ratio": 1.05
+    },
+    "min": {
+     "nrmse": 1.232,
+     "corr": 0.04,
+     "bias": 4.234,
+     "sd_ratio": 0.64
+    }
+   },
+   "spearman_vs_entire_mean": {
+    "rho": 0.365,
+    "p": 0.1037
+   },
+   "spearman_vs_entire_ext": {
+    "rho": 0.832,
+    "p": 0.0
+   }
+  },
+  "June": {
+   "spearman_mean_vs_ext": {
+    "rho": 0.431,
+    "p": 0.0509
+   },
+   "median": {
+    "mean": {
+     "nrmse": 0.343,
+     "corr": 0.954,
+     "bias": 0.14,
+     "sd_ratio": null
+    },
+    "p5": {
+     "nrmse": 0.607,
+     "corr": 0.946,
+     "bias": -1.26,
+     "sd_ratio": null
+    },
+    "p1": {
+     "nrmse": 0.765,
+     "corr": 0.902,
+     "bias": -1.73,
+     "sd_ratio": null
+    },
+    "min": {
+     "nrmse": 1.233,
+     "corr": 0.502,
+     "bias": -0.8,
+     "sd_ratio": null
+    }
+   },
+   "spearman_vs_entire_mean": {
+    "rho": 0.612,
+    "p": 0.0032
+   },
+   "spearman_vs_entire_ext": {
+    "rho": 0.562,
+    "p": 0.008
+   }
+  },
+  "July": {
+   "spearman_mean_vs_ext": {
+    "rho": 0.661,
+    "p": 0.0011
+   },
+   "median": {
+    "mean": {
+     "nrmse": 0.502,
+     "corr": 0.924,
+     "bias": 0.36,
+     "sd_ratio": null
+    },
+    "p5": {
+     "nrmse": 0.568,
+     "corr": 0.929,
+     "bias": -0.24,
+     "sd_ratio": null
+    },
+    "p1": {
+     "nrmse": 0.702,
+     "corr": 0.791,
+     "bias": -0.2,
+     "sd_ratio": null
+    },
+    "min": {
+     "nrmse": 1.157,
+     "corr": 0.187,
+     "bias": 2.67,
+     "sd_ratio": null
+    }
+   },
+   "spearman_vs_entire_mean": {
+    "rho": 0.227,
+    "p": 0.3231
+   },
+   "spearman_vs_entire_ext": {
+    "rho": 0.897,
+    "p": 0.0
+   }
+  },
+  "August": {
+   "spearman_mean_vs_ext": {
+    "rho": 0.297,
+    "p": 0.1904
+   },
+   "median": {
+    "mean": {
+     "nrmse": 0.694,
+     "corr": 0.854,
+     "bias": 0.15,
+     "sd_ratio": null
+    },
+    "p5": {
+     "nrmse": 0.893,
+     "corr": 0.811,
+     "bias": 0.38,
+     "sd_ratio": null
+    },
+    "p1": {
+     "nrmse": 1.063,
+     "corr": 0.627,
+     "bias": 2.42,
+     "sd_ratio": null
+    },
+    "min": {
+     "nrmse": 1.113,
+     "corr": 0.436,
+     "bias": 5.74,
+     "sd_ratio": null
+    }
+   },
+   "spearman_vs_entire_mean": {
+    "rho": 0.204,
+    "p": 0.3752
+   },
+   "spearman_vs_entire_ext": {
+    "rho": 0.759,
+    "p": 0.0001
+   }
+  }
+ }
+}
