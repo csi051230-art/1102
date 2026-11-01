@@ -19,6 +19,7 @@ const Charts = (() => {
       series: g("--series-1"),
       seriesSoft: g("--series-1-soft"),
       accent: g("--accent"),
+      selColors: g("--sel").split(",").map((s) => s.trim()).filter(Boolean),
       pos: g("--div-pos"),
       neg: g("--div-neg"),
       land: g("--land"),
@@ -27,6 +28,9 @@ const Charts = (() => {
       font: g("--font"),
     };
   }
+
+  // 강조 모델 이름표: 강조 색으로 칠한 굵은 글씨
+  const selTick = (S, m) => (S.has(m) ? `<span style="color:${S.color(m)}"><b>▶ ${m}</b></span>` : m);
 
   const isNarrow = () => window.matchMedia("(max-width: 640px)").matches;
 
@@ -150,7 +154,7 @@ const Charts = (() => {
   }
 
   /* ---------- 2. Portrait plot ---------- */
-  function portrait(gd, D, sel, opt, onModel) {
+  function portrait(gd, D, S, opt, onModel) {
     const t = theme();
     const p = opt.period;
     const order = opt.order.slice();
@@ -210,20 +214,12 @@ const Charts = (() => {
           ann.push({ x: xs[j], y: m, text: "자료 없음", showarrow: false, font: { size: 10, color: t.muted } });
       })
     );
-    const shapes = [];
-    if (sel && order.includes(sel)) {
-      const i = order.indexOf(sel);
-      shapes.push({
-        type: "rect",
-        xref: "paper",
-        x0: 0,
-        x1: 1,
-        yref: "y",
-        y0: i - 0.5,
-        y1: i + 0.5,
-        line: { color: t.accent, width: 3 },
+    const shapes = S.list
+      .filter((m) => order.includes(m))
+      .map((m) => {
+        const i = order.indexOf(m);
+        return { type: "rect", xref: "paper", x0: 0, x1: 1, yref: "y", y0: i - 0.5, y1: i + 0.5, line: { color: S.color(m), width: 3 } };
       });
-    }
     const lay = layout(t, {
       height: Math.max(420, order.length * (isNarrow() ? 24 : 28) + 80),
       margin: { l: 10, r: 10, t: 10, b: 10 },
@@ -234,7 +230,7 @@ const Charts = (() => {
         fixedrange: true,
         tickmode: "array",
         tickvals: order,
-        ticktext: order.map((m) => (m === sel ? `<b>▶ ${m}</b>` : m)),
+        ticktext: order.map((m) => selTick(S, m)),
       }),
       annotations: ann,
       shapes,
@@ -291,7 +287,7 @@ const Charts = (() => {
     return { pts, ref };
   }
 
-  function taylor(gd, D, sel, opt, onModel) {
+  function taylor(gd, D, S, opt, onModel) {
     const t = theme();
     const { pts } = taylorPoints(D, opt.period, opt.stat);
     const deg = (r) => (Math.acos(Math.max(-1, Math.min(1, r))) * 180) / Math.PI;
@@ -361,20 +357,21 @@ const Charts = (() => {
       color: g.map((q) => colorOf(q.m)),
       line: { color: ring ? t.text1 : t.surface, width: ring ? 2.5 : 1 },
     });
-    const others = pts.filter((q) => q.m !== sel);
+    const others = pts.filter((q) => !S.has(q.m));
     traces.push({
       type: "scatterpolar",
       r: others.map((q) => q.k),
       theta: others.map((q) => deg(q.r)),
       mode: "markers",
       marker: markerOf(others, 11, false),
-      opacity: sel ? 0.35 : 1,
+      opacity: S.size ? 0.35 : 1,
       customdata: others.map(hover),
       hovertemplate: hoverTpl,
     });
-    // 선택 모델 강조
-    const sp = pts.find((q) => q.m === sel);
-    if (sp) {
+    // 선택 모델 강조 (여러 개)
+    pts
+      .filter((q) => S.has(q.m))
+      .forEach((sp) =>
       traces.push({
         type: "scatterpolar",
         r: [sp.k],
@@ -386,8 +383,8 @@ const Charts = (() => {
         marker: markerOf([sp], 17, true),
         customdata: [hover(sp)],
         hovertemplate: hoverTpl,
-      });
-    }
+      })
+    );
     // 기준점 (ERA5)
     traces.push({
       type: "scatterpolar",
@@ -439,7 +436,7 @@ const Charts = (() => {
   }
 
   /* ---------- 4. 순위 막대 ---------- */
-  function rankBars(gd, D, sel, opt, onModel) {
+  function rankBars(gd, D, S, opt, onModel) {
     const t = theme();
     const p = opt.period;
     const B = CONFIG.rankBases[opt.basis];
@@ -460,8 +457,9 @@ const Charts = (() => {
         orientation: "h",
         y: rows.map((r) => r.m),
         x: rows.map((r) => r.v),
-        marker: { color: rows.map((r) => (r.m === sel ? t.accent : t.series)), line: { color: t.surface, width: 1 } },
-        text: rows.map((r) => (r.rank === null ? "" : `${r.rank}위`)),
+        marker: { color: rows.map((r) => (S.has(r.m) ? S.color(r.m) : S.size ? t.seriesSoft : t.series)), line: { color: t.surface, width: 1 } },
+        // 막대 끝에는 값 (NRMSE는 소수 둘째 자리, 순위 합은 정수). 순위는 y축 순서와 툴팁에 있다.
+        text: rows.map((r) => (r.v === null ? "" : B.nrmse ? r.v.toFixed(2) : String(r.v))),
         textposition: "outside",
         textfont: { color: t.text2, size: 11 },
         cliponaxis: false,
@@ -482,7 +480,7 @@ const Charts = (() => {
         fixedrange: true,
         tickmode: "array",
         tickvals: rows.map((r) => r.m),
-        ticktext: rows.map((r) => (r.m === sel ? `<b>▶ ${r.m}</b>` : r.m)),
+        ticktext: rows.map((r) => selTick(S, r.m)),
       }),
       annotations: ann,
     });
@@ -490,7 +488,7 @@ const Charts = (() => {
   }
 
   /* ---------- 5. 평균장 대 극값장 ---------- */
-  function meanExt(gd, D, sel, opt, onModel) {
+  function meanExt(gd, D, S, opt, onModel) {
     const t = theme();
     const p = opt.period;
     const rows = D.modelIds
@@ -513,8 +511,8 @@ const Charts = (() => {
     });
     const traces = [
       { type: "scatter", mode: "lines", x: [lo, hi], y: [lo, hi], line: { color: t.muted, dash: "dot", width: 1 }, hoverinfo: "skip" },
-      pt(rows.filter((r) => r.m !== sel), sel ? t.seriesSoft : t.series, 10, false),
-      pt(rows.filter((r) => r.m === sel), t.accent, 14, true),
+      pt(rows.filter((r) => !S.has(r.m)), S.size ? t.seriesSoft : t.series, 10, false),
+      ...rows.filter((r) => S.has(r.m)).map((r) => pt([r], S.color(r.m), 14, true)),
     ];
     const lay = layout(t, {
       height: isNarrow() ? 380 : 520,
@@ -528,7 +526,7 @@ const Charts = (() => {
   }
 
   /* ---------- 6. 기간별 순위 변화 ---------- */
-  function rankChange(gd, D, sel, opt, onModel) {
+  function rankChange(gd, D, S, opt, onModel) {
     const t = theme();
     const key = CONFIG.rankBases[opt.basis].rank;
     const xs = D.periods.map(Fmt.period);
@@ -543,29 +541,43 @@ const Charts = (() => {
         text: hi ? ys.map((v) => (v === null ? "" : String(v))) : undefined,
         textposition: "top center",
         textfont: { color: t.text1, size: 12 },
-        line: { color: hi ? t.accent : sel ? t.grid : t.series, width: hi ? 3 : 1.5 },
-        marker: { size: hi ? 10 : 6, color: hi ? t.accent : sel ? t.grid : t.series },
-        opacity: hi || !sel ? (hi ? 1 : 0.55) : 1,
+        line: { color: hi ? S.color(m) : S.size ? t.grid : t.series, width: hi ? 3 : 1.5 },
+        marker: { size: hi ? 10 : 6, color: hi ? S.color(m) : S.size ? t.grid : t.series },
+        opacity: hi || !S.size ? (hi ? 1 : 0.55) : 1,
         connectgaps: false,
         customdata: ys.map((v, i) => [m, Fmt.period(D.periods[i]), v === null ? Fmt.NA : v]),
         hovertemplate: "<b>%{customdata[0]}</b><br>%{customdata[1]}: %{customdata[2]}위<extra></extra>",
       };
     };
-    D.modelIds.filter((m) => m !== sel).forEach((m) => traces.push(mk(m, false)));
-    if (sel && D.modelIds.includes(sel)) traces.push(mk(sel, true));
+    D.modelIds.filter((m) => !S.has(m)).forEach((m) => traces.push(mk(m, false)));
+    S.list.filter((m) => D.modelIds.includes(m)).forEach((m) => traces.push(mk(m, true)));
+    // 강조한 선이 여러 개일 때 구분되도록 오른쪽 끝에 모델 이름
+    const lastP = D.periods[D.periods.length - 1];
+    const ann = S.list
+      .filter((m) => D.rank(lastP, m, key) !== null)
+      .map((m) => ({
+        x: xs[xs.length - 1],
+        y: D.rank(lastP, m, key),
+        text: m,
+        xanchor: "left",
+        xshift: 12,
+        showarrow: false,
+        font: { color: S.color(m), size: 11 },
+      }));
     const nModels = D.modelIds.length;
     const lay = layout(t, {
       height: isNarrow() ? 440 : 560,
-      margin: { l: 10, r: 20, t: 20, b: 10 },
+      margin: { l: 10, r: S.size ? 130 : 20, t: 20, b: 10 },
       hovermode: "closest",
       xaxis: axis(t, { fixedrange: true, showgrid: false }),
       yaxis: axis(t, { title: { text: `${CONFIG.rankBases[opt.basis].label} 순위 (1 = 최상)` }, autorange: false, range: [nModels + 0.8, 0.2], dtick: 2, fixedrange: true }),
+      annotations: ann,
     });
     draw(gd, traces, lay, onModel);
   }
 
   /* ---------- 7. 편의 ---------- */
-  function bias(gd, D, sel, opt, onModel) {
+  function bias(gd, D, S, opt, onModel) {
     const t = theme();
     const { period: p, stat: s } = opt;
     let rows = D.modelIds.map((m) => ({ m, v: D.metric(p, s, m, "bias"), rmse: D.metric(p, s, m, "rmse") }));
@@ -578,8 +590,8 @@ const Charts = (() => {
         y: have.map((r) => r.m),
         x: have.map((r) => r.v),
         marker: {
-          color: have.map((r) => (r.m === sel ? t.accent : r.v >= 0 ? t.pos : t.neg)),
-          line: { color: have.map((r) => (r.m === sel ? t.text1 : t.surface)), width: have.map((r) => (r.m === sel ? 2 : 1)) },
+          color: have.map((r) => (S.has(r.m) ? S.color(r.m) : r.v >= 0 ? t.pos : t.neg)),
+          line: { color: have.map((r) => (S.has(r.m) ? t.text1 : t.surface)), width: have.map((r) => (S.has(r.m) ? 2 : 1)) },
         },
         text: have.map((r) => r.v.toFixed(2)),
         textposition: "outside",
@@ -622,7 +634,7 @@ const Charts = (() => {
         categoryarray: rows.map((r) => r.m),
         tickmode: "array",
         tickvals: rows.map((r) => r.m),
-        ticktext: rows.map((r) => (r.m === sel ? `<b>▶ ${r.m}</b>` : r.m)),
+        ticktext: rows.map((r) => selTick(S, r.m)),
       }),
       annotations: ann,
       shapes,
@@ -632,7 +644,7 @@ const Charts = (() => {
   }
 
   /* ---------- 8. 해상도 대 성능 ---------- */
-  function resolution(gd, D, sel, opt, onModel) {
+  function resolution(gd, D, S, opt, onModel) {
     const t = theme();
     const p = opt.period;
     const res = (m) => {
@@ -672,8 +684,8 @@ const Charts = (() => {
       customdata: rs.map((r) => [r.m, r.inst, +r.x.toFixed(4), Fmt.raw(r.y)]),
       hovertemplate: `<b>%{customdata[0]}</b> (%{customdata[1]})<br>${xLab} = %{customdata[2]}<br>${opt.yLabel} = %{customdata[3]}<extra></extra>`,
     });
-    traces.push(pt(rows.filter((r) => r.m !== sel), sel ? t.seriesSoft : t.series, 10, false));
-    traces.push(pt(rows.filter((r) => r.m === sel), t.accent, 14, true));
+    traces.push(pt(rows.filter((r) => !S.has(r.m)), S.size ? t.seriesSoft : t.series, 10, false));
+    rows.filter((r) => S.has(r.m)).forEach((r) => traces.push(pt([r], S.color(r.m), 14, true)));
     const isRank = opt.y.startsWith("rank:");
     const lay = layout(t, {
       height: isNarrow() ? 380 : 500,

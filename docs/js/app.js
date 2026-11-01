@@ -12,7 +12,7 @@ const App = (() => {
     D: null,
     userFile: null, // 끌어다 놓은 파일 이름
     tab: "overview",
-    sel: null,
+    sel: [], // 강조한 모델 (누른 순서)
     o: {
       portrait: { period: null, order: "name" },
       taylor: { period: null, stat: null },
@@ -104,7 +104,7 @@ const App = (() => {
 
   function setData(D) {
     state.D = D;
-    if (state.sel && !D.modelIds.includes(state.sel)) state.sel = null;
+    state.sel = state.sel.filter((m) => D.modelIds.includes(m));
     const P0 = D.periods[0],
       S0 = D.stats[0];
     const fixP = (o, list = D.periods) => {
@@ -165,17 +165,41 @@ const App = (() => {
     render();
   }
 
+  // 강조 상태를 그림 함수에 넘기는 형태. 색은 누른 순서대로 고정 배정한다.
+  function selection() {
+    const list = state.sel.slice();
+    const pal = Charts.theme().selColors;
+    const color = (m) => {
+      const i = list.indexOf(m);
+      return i < 0 ? null : pal[i % pal.length];
+    };
+    return { list, size: list.length, has: (m) => list.includes(m), color };
+  }
+  const isSel = (m) => state.sel.includes(m);
+
   function fillModelSelect() {
     const s = $("#modelSelect");
-    s.innerHTML = `<option value="">강조 없음</option>` + state.D.modelIds.map((m) => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
-    s.value = state.sel || "";
+    s.innerHTML =
+      `<option value="">모델 추가·해제…</option>` +
+      state.D.modelIds.map((m) => `<option value="${esc(m)}">${isSel(m) ? "✓ " : ""}${esc(m)}</option>`).join("");
+    s.value = "";
+  }
+
+  function updateSelUI() {
+    const S = selection();
+    $("#selChip").hidden = !S.size;
+    $("#selList").innerHTML = S.list
+      .map(
+        (m) =>
+          `<button type="button" class="chip" data-model="${esc(m)}" title="강조 해제"><span class="dot" style="background:${S.color(m)}"></span>${esc(m)} ✕</button>`
+      )
+      .join("");
+    fillModelSelect();
   }
 
   function toggleModel(m) {
-    state.sel = state.sel === m ? null : m;
-    $("#modelSelect").value = state.sel || "";
-    $("#selChip").hidden = !state.sel;
-    $("#selName").textContent = state.sel || "";
+    state.sel = isSel(m) ? state.sel.filter((x) => x !== m) : [...state.sel, m];
+    updateSelUI();
     render();
   }
 
@@ -183,12 +207,13 @@ const App = (() => {
     $("#themeBtn").addEventListener("click", cycleTheme);
     $("#varSelect").addEventListener("change", (e) => selectVariable(e.target.value));
     $("#modelSelect").addEventListener("change", (e) => {
-      state.sel = e.target.value || null;
-      $("#selChip").hidden = !state.sel;
-      $("#selName").textContent = state.sel || "";
+      if (e.target.value) toggleModel(e.target.value);
+    });
+    $("#selClear").addEventListener("click", () => {
+      state.sel = [];
+      updateSelUI();
       render();
     });
-    $("#selClear").addEventListener("click", () => toggleModel(state.sel));
     $("#fileInput").addEventListener("change", (e) => {
       if (e.target.files[0]) loadUserFile(e.target.files[0]);
       e.target.value = "";
@@ -294,8 +319,18 @@ const App = (() => {
           <aside class="note">
             <div id="meanext-stat" class="statbox"></div>
             <h3>읽는 법</h3>
-            <p>가로축은 평균장(mean) NRMSE, 세로축은 극값장(p5·p1·min NRMSE의 산술평균) NRMSE입니다. 점선은 1:1 선입니다.</p>
-            <p>Spearman ρ는 두 순위가 얼마나 같은 방향으로 움직이는지 나타냅니다. ρ가 0에 가깝다면 평균장을 잘 재현하는 모델이 극값장도 잘 재현한다고 말할 수 없습니다.</p>
+            <ul>
+              <li><b>가로축</b>: 평균장(mean) NRMSE</li>
+              <li><b>세로축</b>: 극값장 NRMSE — p5·p1·min NRMSE의 산술평균</li>
+              <li><b>점의 위치</b>: 왼쪽 아래에 가까울수록 두 성능이 모두 우수</li>
+              <li><b>점선(1:1)</b>: 두 NRMSE가 같은 지점. 선 위는 극값장 오차가, 선 아래는 평균장 오차가 더 큼</li>
+            </ul>
+            <h3>Spearman ρ · 성능 순위의 연관성</h3>
+            <ul>
+              <li><b>1에 가까울수록</b>: 평균장 성능이 좋은 모델은 극값장 성능도 좋은 경향</li>
+              <li><b>0에 가까울수록</b>: 평균장 성능만으로 극값장 성능을 판단하기 어려움</li>
+              <li><b>−1에 가까울수록</b>: 평균장 성능이 좋은 모델은 극값장 성능이 낮은 경향</li>
+            </ul>
           </aside>
         </div>`,
       rankchange: `
@@ -304,7 +339,7 @@ const App = (() => {
           <div class="chart-card"><div class="chart" id="ch-rankchange"></div></div>
           <aside class="note">
             <h3>읽는 법</h3>
-            <p>각 선이 한 모델입니다. 위로 갈수록 순위가 높습니다(1 = 최상). 모델을 고르면 그 선이 강조되고 순위가 표시됩니다.</p>
+            <p>각 선이 한 모델입니다. 위로 갈수록 순위가 높습니다(1 = 최상). 모델을 고르면 그 선이 강조되고 순위가 표시됩니다. 여러 모델을 함께 고를 수 있습니다.</p>
             <p>기간마다 NRMSE 분모가 달라 값이 아니라 <b>순위</b>만 비교합니다.</p>
             <div id="rankchange-stat"></div>
           </aside>
@@ -380,8 +415,7 @@ const App = (() => {
   function render() {
     const D = state.D;
     if (!D) return;
-    $("#selChip").hidden = !state.sel;
-    $("#selName").textContent = state.sel || "";
+    updateSelUI();
     const fn = { overview, portrait, taylor, rank, meanext, rankchange, bias, resolution }[state.tab];
     try {
       fn();
@@ -444,7 +478,7 @@ const App = (() => {
       .map((m) => {
         const r = m.resolution_deg || {},
           g = m.grid_points || {};
-        return `<tr data-model="${esc(m.id)}" tabindex="0" class="${m.id === state.sel ? "sel" : ""}">
+        return `<tr data-model="${esc(m.id)}" tabindex="0" class="${isSel(m.id) ? "sel" : ""}">
           <td><b>${esc(m.id)}</b></td>
           <td title="${esc(m.institution)}">${esc(m.institution_id)}<div class="small muted">${esc(m.institution)}</div></td>
           <td>${esc(m.country)}</td>
@@ -465,7 +499,7 @@ const App = (() => {
       o = state.o.portrait;
     let order = D.modelIds.slice();
     if (o.order === "rank") order.sort((a, b) => (D.rank(o.period, a, "overall_rank") ?? 1e9) - (D.rank(o.period, b, "overall_rank") ?? 1e9));
-    Charts.portrait($("#ch-portrait"), D, state.sel, { period: o.period, order }, toggleModel);
+    Charts.portrait($("#ch-portrait"), D, selection(), { period: o.period, order }, toggleModel);
     const rs = D.stats.map((s) => `<tr><td>${esc(Fmt.stat(s))}</td><td class="num">${Fmt.raw(D.refSd(o.period, s))}</td></tr>`).join("");
     $("#portrait-ref").innerHTML = `<h3>ERA5 공간 표준편차 (NRMSE 분모, ${esc(D.units)})</h3><table class="data compact"><tbody>${rs}</tbody></table>`;
   }
@@ -478,7 +512,7 @@ const App = (() => {
       $("#ch-taylor").innerHTML = `<p class="empty">설정된 Taylor 기간이 이 자료에 없습니다.</p>`;
       return;
     }
-    const pts = Charts.taylor($("#ch-taylor"), D, state.sel, o, toggleModel);
+    const pts = Charts.taylor($("#ch-taylor"), D, selection(), o, toggleModel);
     const total = D.modelIds.length;
     const missing = D.modelIds.filter((m) => !pts.some((q) => q.m === m));
     $("#taylor-count").innerHTML =
@@ -490,7 +524,7 @@ const App = (() => {
     $("#taylor-legend").innerHTML = D.modelIds
       .map((m) => {
         const has = pts.some((q) => q.m === m);
-        return `<button type="button" data-model="${esc(m)}" class="${m === state.sel ? "sel" : ""}${has ? "" : " nodata"}" title="${has ? "" : "자료 없음"}">
+        return `<button type="button" data-model="${esc(m)}" class="${isSel(m) ? "sel" : ""}${has ? "" : " nodata"}" title="${has ? "" : "자료 없음"}">
           <span class="dot" style="background:${colors[m]}"></span>${esc(m)}</button>`;
       })
       .join("");
@@ -509,7 +543,7 @@ const App = (() => {
       .map((m) => {
         const q = pts.find((x) => x.m === m);
         const ob = D.metricObj(o.period, o.stat, m) || {};
-        return `<tr data-model="${esc(m)}" tabindex="0" class="${m === state.sel ? "sel" : ""}"><td>${esc(m)}</td>
+        return `<tr data-model="${esc(m)}" tabindex="0" class="${isSel(m) ? "sel" : ""}"><td>${esc(m)}</td>
           <td class="num">${Fmt.raw(Data.num(ob.corr))}</td><td class="num">${Fmt.raw(Data.num(ob.sd_ratio))}</td>
           <td class="num">${q && q.crmse !== null ? (q.crmseComputed ? q.crmse.toFixed(3) + " (계산값)" : String(q.crmse)) : Fmt.NA}</td>
           <td class="num">${Fmt.raw(Data.num(ob.sd_mod))}</td></tr>`;
@@ -522,7 +556,7 @@ const App = (() => {
   function rank() {
     const D = state.D,
       o = state.o.rank;
-    Charts.rankBars($("#ch-rank"), D, state.sel, o, toggleModel);
+    Charts.rankBars($("#ch-rank"), D, selection(), o, toggleModel);
     const R = D.meta.ranking || {};
     $("#rank-note").innerHTML = `<h3>순위 기준</h3>
       <ul>
@@ -570,7 +604,7 @@ const App = (() => {
     const body = ms
       .map(
         (m) =>
-          `<tr data-model="${esc(m)}" tabindex="0" class="${m === state.sel ? "sel" : ""}">${cols
+          `<tr data-model="${esc(m)}" tabindex="0" class="${isSel(m) ? "sel" : ""}">${cols
             .map(([k]) => {
               const v = val(m, k);
               return k === "model" ? `<td><b>${esc(m)}</b></td>` : `<td class="num">${Fmt.raw(v)}</td>`;
@@ -599,7 +633,7 @@ const App = (() => {
   function meanext() {
     const D = state.D,
       o = state.o.meanext;
-    const n = Charts.meanExt($("#ch-meanext"), D, state.sel, o, toggleModel);
+    const n = Charts.meanExt($("#ch-meanext"), D, selection(), o, toggleModel);
     const sp = D.summary(o.period)?.spearman_mean_vs_ext;
     const rho = Data.num(sp?.rho),
       p = Data.num(sp?.p);
@@ -611,7 +645,7 @@ const App = (() => {
   function rankchange() {
     const D = state.D,
       o = state.o.rankchange;
-    Charts.rankChange($("#ch-rankchange"), D, state.sel, o, toggleModel);
+    Charts.rankChange($("#ch-rankchange"), D, selection(), o, toggleModel);
     const rows = D.periods
       .map((p) => {
         const s = D.summary(p) || {};
@@ -630,7 +664,7 @@ const App = (() => {
   function bias() {
     const D = state.D,
       o = state.o.bias;
-    const r = Charts.bias($("#ch-bias"), D, state.sel, o, toggleModel);
+    const r = Charts.bias($("#ch-bias"), D, selection(), o, toggleModel);
     $("#bias-count").innerHTML = `<b>${r.total}개 중 ${r.n}개 값 있음</b> · ${esc(Fmt.period(o.period))} · ${esc(Fmt.stat(o.stat))}${
       r.n === 0 ? ` <span class="badge">이 기간·통계량은 모델별 편의 자료가 없습니다</span>` : ""
     }`;
@@ -644,12 +678,12 @@ const App = (() => {
     const D = state.D,
       o = state.o.resolution;
     const yLabel = (resYOptions().find(([v]) => v === o.y) || [, o.y])[1];
-    const rows = Charts.resolution($("#ch-resolution"), D, state.sel, { ...o, yLabel }, toggleModel);
+    const rows = Charts.resolution($("#ch-resolution"), D, selection(), { ...o, yLabel }, toggleModel);
     const xName = { mean: "격자 간격 평균 (계산값)", lon: "경도 간격", lat: "위도 간격" }[o.x];
     const body = rows
       .slice()
       .sort((a, b) => a.x - b.x || a.m.localeCompare(b.m))
-      .map((r) => `<tr data-model="${esc(r.m)}" tabindex="0" class="${r.m === state.sel ? "sel" : ""}"><td>${esc(r.m)}</td><td>${esc(r.inst)}</td><td class="num">${+r.x.toFixed(4)}</td><td class="num">${Fmt.raw(r.y)}</td></tr>`)
+      .map((r) => `<tr data-model="${esc(r.m)}" tabindex="0" class="${isSel(r.m) ? "sel" : ""}"><td>${esc(r.m)}</td><td>${esc(r.inst)}</td><td class="num">${+r.x.toFixed(4)}</td><td class="num">${Fmt.raw(r.y)}</td></tr>`)
       .join("");
     $("#resolution-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>기관</th><th>${xName} (°)</th><th>${esc(yLabel)}</th></tr></thead><tbody>${body}</tbody></table></div>`;
   }

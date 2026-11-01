@@ -28,7 +28,7 @@
     </div>
     <div class="toolbar">
       <label class="ctl"><span>변수</span><select id="varSelect" aria-label="변수 선택"></select></label>
-      <label class="ctl"><span>모델 강조</span><select id="modelSelect" aria-label="강조할 모델"></select></label>
+      <label class="ctl"><span>모델 강조 (여러 개 가능)</span><select id="modelSelect" aria-label="강조할 모델 추가 또는 해제"></select></label>
       <label class="btn file-btn" title="같은 구조의 JSON 파일을 열거나 화면에 끌어다 놓으세요. 파일은 브라우저 안에서만 읽습니다.">
         JSON 열기<input id="fileInput" type="file" accept=".json,application/json" hidden>
       </label>
@@ -40,8 +40,9 @@
   <nav id="tabs" class="tabs" role="tablist" aria-label="화면"></nav>
 
   <div id="selChip" class="sel-chip" hidden>
-    강조 중: <b id="selName"></b>
-    <button id="selClear" class="btn small" aria-label="강조 해제">해제 ✕</button>
+    <span class="sel-label">강조 중</span>
+    <span id="selList" class="sel-list"></span>
+    <button id="selClear" class="btn small" aria-label="강조 모두 해제">모두 해제</button>
   </div>
 
   <main id="panels"></main>

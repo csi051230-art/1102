@@ -16,6 +16,8 @@
   --series-1-soft: rgba(42, 120, 214, 0.28);
   --accent: #eb6834;
   --accent-wash: rgba(235, 104, 52, 0.12);
+  /* 강조 모델 색 (누른 순서대로) */
+  --sel: #eb6834, #6250d6, #1baf7a, #e87ba4, #eda100, #e34948, #008300, #52514e;
   --div-pos: #e34948;
   --div-neg: #2a78d6;
   --land: #ecebe6;
@@ -42,6 +44,7 @@
   --series-1-soft: rgba(57, 135, 229, 0.3);
   --accent: #f07a45;
   --accent-wash: rgba(240, 122, 69, 0.16);
+  --sel: #f07a45, #9085e9, #199e70, #d55181, #c98500, #e66767, #3fae3f, #c3c2b7;
   --div-pos: #e66767;
   --div-neg: #3987e5;
   --land: #2a2a28;
@@ -277,3 +280,23 @@ button.sort { font: inherit; color: inherit; background: none; border: none; cur
 .model-legend button.sel { border-color: var(--text-primary); font-weight: 600; }
 .model-legend button.nodata { color: var(--text-muted); text-decoration: line-through; }
 .model-legend .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+
+/* 강조 모델 목록 */
+.sel-chip { flex-wrap: wrap; }
+.sel-label { color: var(--text-secondary); }
+.sel-list { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.chip {
+  font: inherit;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-solid);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--text-muted); }
+.chip .dot { width: 10px; height: 10px; border-radius: 50%; }
