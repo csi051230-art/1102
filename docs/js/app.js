@@ -180,7 +180,7 @@ const App = (() => {
   function fillModelSelect() {
     const s = $("#modelSelect");
     s.innerHTML =
-      `<option value="">모델 추가·해제…</option>` +
+      `<option value="">선택 안 함</option>` +
       state.D.modelIds.map((m) => `<option value="${esc(m)}">${isSel(m) ? "✓ " : ""}${esc(m)}</option>`).join("");
     s.value = "";
   }
@@ -434,9 +434,9 @@ const App = (() => {
     const latTxt = Array.isArray(r.lat) ? `${r.lat[0]}–${r.lat[1]}°N` : "";
     $("#ov-body").innerHTML = `
       <div class="ov">
-          <p class="lead">CMIP6 전지구 기후모델(GCM) ${D.models.length}개가 북서태평양(${esc(lonTxt)}, ${esc(latTxt)})의
-          <b>${esc(D.varLong)} (${esc(D.varName)})</b>을(를) 얼마나 잘 재현하는지 ERA5 재분석 자료와 비교해 평가한 결과입니다.
-          기간·통계량별 공간 오차(NRMSE), 상관계수, 표준편차비, 편의와 모델 순위를 탐색할 수 있습니다.</p>
+          <p class="lead">CMIP6 전지구 기후모델(GCM) ${D.models.length}개의 북서태평양 ${esc(CONFIG.varNames[D.varName] ?? D.varLong)}(${esc(D.varName)}) 재현 성능을 ERA5 재분석 자료와 비교해 평가했습니다.</p>
+          <p class="lead">기간과 통계량에 따라 공간 오차(NRMSE), 상관계수, 표준편차비, 편의 및 모델 순위를 확인할 수 있습니다.</p>
+          <p class="lead">평가 영역: ${esc(CONFIG.overview.region ?? `${latTxt}, ${lonTxt}`)}</p>
           <div class="chart-card"><div class="chart" id="ch-map"></div></div>
           <p class="muted small">상자는 평가 영역입니다. 해안선: Natural Earth 1:50m.</p>
       </div>

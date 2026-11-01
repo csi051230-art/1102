@@ -13,6 +13,13 @@ const CONFIG = {
     commonGrid: "1.875°×1.25° = 494 points",
   },
 
+  // 개요 설명에 쓰는 변수의 한국어 이름. 없으면 JSON meta.variable.long_name을 쓴다.
+  varNames: {
+    psl: "해면기압",
+    uas: "지상 동서풍",
+    vas: "지상 남북풍",
+  },
+
   // 비슷한 기관을 한 묶음으로 보는 규칙 (Taylor diagram 색). institution_id → 묶음 이름.
   // 여기 없는 institution_id는 그 자체가 묶음 이름이다. 같은 묶음의 모델은 비슷한 색에서 밝기만 다르다.
   familyAlias: {
