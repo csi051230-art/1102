@@ -24,7 +24,6 @@ const Charts = (() => {
       land: g("--land"),
       ocean: g("--ocean"),
       seq: g("--seq").split(",").map((s) => s.trim()),
-      fam: g("--fam").split(",").map((s) => s.trim()).filter(Boolean),
       font: g("--font"),
     };
   }
@@ -244,69 +243,27 @@ const Charts = (() => {
   }
 
   /* ---------- 3. Taylor diagram ---------- */
-  // 기관 묶음별 색: 모델이 2개 이상인 묶음에 범주색을 자료 순서대로 고정 배정하고,
-  // 같은 묶음 안의 형제 모델은 밝기만 달리한다. 범주색이 모자라거나 모델이 1개인 기관은 회색.
-  function familyColors(D, t) {
+  // 모델별 색: 자료 순서(이름순)대로 색상환을 한 바퀴 돌며 모델마다 다른 색을 준다.
+  // 같은 기관(형제 모델)은 이웃하므로 비슷한 색이 되고, 그 안에서는 밝은 색 → 어두운 색 순으로 구분한다.
+  function modelColors(D) {
     const famOf = (m) => {
       const id = D.model(m)?.institution_id || m;
       return CONFIG.familyAlias[id] || id;
     };
-    const order = [];
+    const ids = D.modelIds;
     const members = {};
-    D.modelIds.forEach((m) => {
-      const f = famOf(m);
-      if (!members[f]) {
-        members[f] = [];
-        order.push(f);
-      }
-      members[f].push(m);
+    ids.forEach((m) => (members[famOf(m)] = members[famOf(m)] || []).push(m));
+    const N = ids.length;
+    const color = {};
+    ids.forEach((m, i) => {
+      const h = N > 1 ? (335 * i) / (N - 1) : 0;
+      const sib = members[famOf(m)];
+      const j = sib.indexOf(m),
+        n = sib.length;
+      const l = n > 1 ? 62 - (22 * j) / (n - 1) : 52;
+      color[m] = `hsl(${h.toFixed(1)}, 72%, ${l.toFixed(1)}%)`;
     });
-    const color = {},
-      name = {},
-      groups = [];
-    let slot = 0;
-    order.forEach((f) => {
-      const ms = members[f];
-      ms.forEach((m) => (name[m] = f));
-      if (ms.length < 2 || slot >= t.fam.length) return;
-      const base = t.fam[slot++];
-      const n = ms.length;
-      ms.forEach((m, i) => (color[m] = shade(base, -0.14 + (0.28 * i) / (n - 1))));
-      groups.push({ name: f, base, models: ms });
-    });
-    return { color, name, groups };
-  }
-
-  // HSL 밝기만 바꾼다 (d: -1~1)
-  function shade(hex, d) {
-    const n = parseInt(hex.replace("#", ""), 16);
-    const r = (n >> 16) / 255,
-      g = ((n >> 8) & 255) / 255,
-      b = (n & 255) / 255;
-    const mx = Math.max(r, g, b),
-      mn = Math.min(r, g, b);
-    let h = 0,
-      s = 0,
-      l = (mx + mn) / 2;
-    if (mx !== mn) {
-      const c = mx - mn;
-      s = l > 0.5 ? c / (2 - mx - mn) : c / (mx + mn);
-      h = mx === r ? (g - b) / c + (g < b ? 6 : 0) : mx === g ? (b - r) / c + 2 : (r - g) / c + 4;
-      h /= 6;
-    }
-    l = Math.max(0.15, Math.min(0.85, l + d));
-    const f = (p, q, x) => {
-      if (x < 0) x += 1;
-      if (x > 1) x -= 1;
-      if (x < 1 / 6) return p + (q - p) * 6 * x;
-      if (x < 1 / 2) return q;
-      if (x < 2 / 3) return p + (q - p) * (2 / 3 - x) * 6;
-      return p;
-    };
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s,
-      p = 2 * l - q;
-    const to = (x) => Math.round(x * 255).toString(16).padStart(2, "0");
-    return "#" + (s === 0 ? to(l) + to(l) + to(l) : to(f(p, q, h + 1 / 3)) + to(f(p, q, h)) + to(f(p, q, h - 1 / 3)));
+    return color;
   }
 
   function taylorPoints(D, p, s) {
@@ -382,35 +339,27 @@ const Charts = (() => {
     for (let i = 0; i <= (hasNeg ? 180 : 90); i++) arcT.push(i);
     traces.push({ type: "scatterpolar", r: arcT.map(() => 1), theta: arcT, mode: "lines", line: { color: t.text2, width: 1, dash: "dash" }, hoverinfo: "skip" });
 
-    // 점 색 = 기관 묶음, 모양 = 출처 (속이 찬 마커 = 출력값, 속이 빈 마커 = 추출값)
-    const fam = familyColors(D, t);
-    const colorOf = (m) => fam.color[m] || t.muted;
-    const hover = (q) => {
-      const S = CONFIG.sources[q.src];
-      return [
-        q.m,
-        Fmt.raw(q.r),
-        Fmt.raw(q.k),
-        q.crmse === null ? Fmt.NA : (q.crmseComputed ? q.crmse.toFixed(3) : String(q.crmse)) + ` ${D.units}` + (q.crmseComputed ? " (계산값)" : ""),
-        q.sdMod === null ? Fmt.NA : `${q.sdMod} ${D.units}`,
-        S.label + (q.rawSrc ? ` (${q.rawSrc})` : ""),
-        S.error,
-        q.src === "digitized_hidden"
-          ? `<br><b>⚠ 표시 위치는 실제 위치가 아닙니다.</b>${q.twins.length ? `<br>같은 값: ${q.twins.join(", ")}` : ""}`
-          : "",
-        fam.name[q.m] || "",
-      ];
-    };
+    // 점 색 = 모델별 색 (같은 기관끼리 비슷한 색)
+    const colors = modelColors(D);
+    const colorOf = (m) => colors[m] || t.muted;
+    const hover = (q) => [
+      q.m,
+      Fmt.raw(q.r),
+      Fmt.raw(q.k),
+      q.crmse === null ? Fmt.NA : (q.crmseComputed ? q.crmse.toFixed(3) : String(q.crmse)) + ` ${D.units}` + (q.crmseComputed ? " (계산값)" : ""),
+      q.sdMod === null ? Fmt.NA : `${q.sdMod} ${D.units}`,
+      q.src === "digitized_hidden"
+        ? `<br><b>⚠ 표시 위치는 실제 위치가 아닙니다.</b>${q.twins.length ? `<br>같은 값: ${q.twins.join(", ")}` : ""}`
+        : "",
+    ];
     const hoverTpl =
-      "<b>%{customdata[0]}</b> (%{customdata[8]})<br>상관계수 = %{customdata[1]}<br>표준편차비 = %{customdata[2]}<br>centred RMSE = %{customdata[3]}<br>모델 공간 표준편차 = %{customdata[4]}<br>출처: %{customdata[5]}<br>오차: %{customdata[6]}%{customdata[7]}<extra></extra>";
+      "<b>%{customdata[0]}</b><br>상관계수 = %{customdata[1]}<br>표준편차비 = %{customdata[2]}<br>centred RMSE = %{customdata[3]}<br>모델 공간 표준편차 = %{customdata[4]}%{customdata[5]}<extra></extra>";
+    // 실제 위치가 아닌 점(digitized_hidden)만 ✕로 구분하고, 나머지는 모두 속이 찬 원
     const markerOf = (g, size, ring) => ({
-      symbol: g.map((q) => CONFIG.sources[q.src].symbol),
+      symbol: g.map((q) => (q.src === "digitized_hidden" ? "x" : "circle")),
       size,
       color: g.map((q) => colorOf(q.m)),
-      line: {
-        color: g.map((q) => (ring ? t.text1 : q.src === "printed" ? t.surface : colorOf(q.m))),
-        width: g.map((q) => (ring ? 2.5 : q.src === "printed" ? 1 : 2)),
-      },
+      line: { color: ring ? t.text1 : t.surface, width: ring ? 2.5 : 1 },
     });
     const others = pts.filter((q) => q.m !== sel);
     traces.push({
@@ -419,7 +368,7 @@ const Charts = (() => {
       theta: others.map((q) => deg(q.r)),
       mode: "markers",
       marker: markerOf(others, 11, false),
-      opacity: sel ? 0.4 : 1,
+      opacity: sel ? 0.35 : 1,
       customdata: others.map(hover),
       hovertemplate: hoverTpl,
     });
@@ -439,48 +388,6 @@ const Charts = (() => {
         hovertemplate: hoverTpl,
       });
     }
-    // 범례 1: 출처 (모양) — 회색 견본
-    Object.keys(CONFIG.sources).forEach((key) => {
-      if (!pts.some((q) => q.src === key)) return;
-      const S = CONFIG.sources[key];
-      traces.push({
-        type: "scatterpolar",
-        r: [null],
-        theta: [null],
-        mode: "markers",
-        name: S.label,
-        showlegend: true,
-        legend: "legend",
-        marker: { symbol: S.symbol, size: 11, color: t.text2, line: { color: key === "printed" ? t.surface : t.text2, width: key === "printed" ? 1 : 2 } },
-        hoverinfo: "skip",
-      });
-    });
-    // 범례 2: 기관 묶음 (색)
-    fam.groups.forEach((g) =>
-      traces.push({
-        type: "scatterpolar",
-        r: [null],
-        theta: [null],
-        mode: "markers",
-        name: `${g.name}: ${g.models.join(", ")}`,
-        showlegend: true,
-        legend: "legend2",
-        marker: { symbol: "circle", size: 11, color: g.base },
-        hoverinfo: "skip",
-      })
-    );
-    if (pts.some((q) => !fam.color[q.m]))
-      traces.push({
-        type: "scatterpolar",
-        r: [null],
-        theta: [null],
-        mode: "markers",
-        name: "그 밖의 기관 (모델 1개)",
-        showlegend: true,
-        legend: "legend2",
-        marker: { symbol: "circle", size: 11, color: t.muted },
-        hoverinfo: "skip",
-      });
     // 기준점 (ERA5)
     traces.push({
       type: "scatterpolar",
@@ -497,16 +404,10 @@ const Charts = (() => {
 
     traces.forEach((tr) => (tr.showlegend = tr.showlegend === true));
     const corrTicks = hasNeg ? [-1, -0.9, -0.6, -0.3, 0, 0.3, 0.6, 0.8, 0.9, 0.95, 0.99, 1] : [0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 1];
-    // 그림 아래 범례 자리 (px): 출처 범례 한두 줄 + 기관 범례 여러 줄
-    const legendPx = 225,
-      H = (isNarrow() ? 400 : 560) + legendPx;
+    // 모델 범례는 그림 아래 HTML 목록으로 따로 그린다 (app.js)
     const lay = layout(t, {
-      height: H,
-      margin: { l: 40, r: 40, t: 34, b: legendPx },
-      showlegend: true,
-      legend: { orientation: "h", y: (legendPx - 30) / H, yref: "container", yanchor: "top", x: 0, font: { color: t.text2 }, title: { text: "출처 ", font: { color: t.text2 } } },
-      // 기관 범례는 그림 아래에 세로로 (그림 위를 가리지 않게)
-      legend2: { orientation: "v", x: 0, xanchor: "left", y: (legendPx - 72) / H, yanchor: "top", yref: "container", font: { color: t.text2, size: 11 }, title: { text: "기관 (색)", side: "top", font: { color: t.text2 } } },
+      height: isNarrow() ? 440 : 600,
+      margin: { l: 40, r: 40, t: 34, b: 55 },
       polar: {
         bgcolor: t.surface,
         sector: [0, hasNeg ? 180 : 90],
@@ -784,5 +685,5 @@ const Charts = (() => {
     return rows;
   }
 
-  return { theme, regionMap, portrait, taylor, taylorPoints, rankBars, meanExt, rankChange, bias, resolution };
+  return { theme, regionMap, portrait, taylor, taylorPoints, modelColors, rankBars, meanExt, rankChange, bias, resolution };
 })();

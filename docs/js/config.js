@@ -14,7 +14,7 @@ const CONFIG = {
   },
 
   // 비슷한 기관을 한 묶음으로 보는 규칙 (Taylor diagram 색). institution_id → 묶음 이름.
-  // 여기 없는 institution_id는 그 자체가 묶음 이름이다. 모델이 2개 이상인 묶음만 색을 받고, 나머지는 회색.
+  // 여기 없는 institution_id는 그 자체가 묶음 이름이다. 같은 묶음의 모델은 비슷한 색에서 밝기만 다르다.
   familyAlias: {
     "CSIRO-ARCCSS": "CSIRO",
   },

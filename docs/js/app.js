@@ -221,8 +221,8 @@ const App = (() => {
     });
     // 표의 모델 행 클릭 → 강조
     document.addEventListener("click", (e) => {
-      const tr = e.target.closest("tr[data-model]");
-      if (tr) toggleModel(tr.dataset.model);
+      const el = e.target.closest("[data-model]");
+      if (el) toggleModel(el.dataset.model);
     });
     document.addEventListener("keydown", (e) => {
       const tr = e.target.closest?.("tr[data-model]");
@@ -269,7 +269,7 @@ const App = (() => {
         </div>
         <div id="taylor-count" class="countline"></div>
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-taylor"></div></div>
+          <div class="chart-card"><div class="chart" id="ch-taylor"></div><div id="taylor-legend" class="model-legend"></div></div>
           <aside class="note">
             <h3>읽는 법</h3>
             <p>★ ERA5에 가까울수록 좋습니다. 원점에서의 거리 = <b>표준편차비</b>(모델 ÷ ERA5, 1이면 공간 변동 크기 일치), 각도 = <b>상관계수</b>(면적가중 공간 상관), 점선 호 = ERA5 표준편차로 나눈 <b>centred RMSE</b>(평균 편의를 뺀 RMSE).</p>
@@ -480,17 +480,20 @@ const App = (() => {
     }
     const pts = Charts.taylor($("#ch-taylor"), D, state.sel, o, toggleModel);
     const total = D.modelIds.length;
-    const bySrc = {};
-    pts.forEach((q) => (bySrc[q.src] = (bySrc[q.src] || 0) + 1));
     const missing = D.modelIds.filter((m) => !pts.some((q) => q.m === m));
     $("#taylor-count").innerHTML =
       `<b>${total}개 중 ${pts.length}개 표시</b>${
         pts.some((q) => q.src === "digitized_hidden") ? ` <span class="badge">이 중 ${pts.filter((q) => q.src === "digitized_hidden").length}개는 실제 위치 아님</span>` : ""
       } · ${esc(Fmt.period(o.period))} · ${esc(Fmt.stat(o.stat))}` +
-      ` <span class="muted">(${Object.entries(bySrc)
-        .map(([k, n]) => `${esc(CONFIG.sources[k].label)} ${n}`)
-        .join(", ")})</span>` +
       (missing.length ? `<br><span class="muted">자료 없음: ${missing.map(esc).join(", ")}</span>` : "");
+    const colors = Charts.modelColors(D);
+    $("#taylor-legend").innerHTML = D.modelIds
+      .map((m) => {
+        const has = pts.some((q) => q.m === m);
+        return `<button type="button" data-model="${esc(m)}" class="${m === state.sel ? "sel" : ""}${has ? "" : " nodata"}" title="${has ? "" : "자료 없음"}">
+          <span class="dot" style="background:${colors[m]}"></span>${esc(m)}</button>`;
+      })
+      .join("");
     const hidden = pts.filter((q) => q.src === "digitized_hidden");
     $("#taylor-hidden").innerHTML = hidden.length
       ? `<div class="callout warn"><b>⚠ 실제 위치가 아닌 점</b><br>${hidden
@@ -506,14 +509,13 @@ const App = (() => {
       .map((m) => {
         const q = pts.find((x) => x.m === m);
         const ob = D.metricObj(o.period, o.stat, m) || {};
-        const S = q ? CONFIG.sources[q.src] : null;
         return `<tr data-model="${esc(m)}" tabindex="0" class="${m === state.sel ? "sel" : ""}"><td>${esc(m)}</td>
           <td class="num">${Fmt.raw(Data.num(ob.corr))}</td><td class="num">${Fmt.raw(Data.num(ob.sd_ratio))}</td>
           <td class="num">${q && q.crmse !== null ? (q.crmseComputed ? q.crmse.toFixed(3) + " (계산값)" : String(q.crmse)) : Fmt.NA}</td>
-          <td class="num">${Fmt.raw(Data.num(ob.sd_mod))}</td><td>${S ? esc(S.label) : "—"}</td></tr>`;
+          <td class="num">${Fmt.raw(Data.num(ob.sd_mod))}</td></tr>`;
       })
       .join("");
-    $("#taylor-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>상관계수</th><th>표준편차비</th><th>centred RMSE [${esc(D.units)}]</th><th>모델 표준편차 [${esc(D.units)}]</th><th>출처</th></tr></thead><tbody>${rows}</tbody></table></div>
+    $("#taylor-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>상관계수</th><th>표준편차비</th><th>centred RMSE [${esc(D.units)}]</th><th>모델 표준편차 [${esc(D.units)}]</th></tr></thead><tbody>${rows}</tbody></table></div>
       <p class="muted small">ERA5 공간 표준편차 = ${Fmt.raw(D.refSd(o.period, o.stat))} ${esc(D.units)}</p>`;
   }
 

@@ -29,7 +29,7 @@ CMIP6 전지구 기후모델(GCM) 21개가 북서태평양의 해면기압(psl)�
 |---|---|
 | 개요 | 연구 설명, 영역 지도, 분석 설정, 모델 정보 표 (자료 생성일은 화면 위쪽에 표시) |
 | Portrait plot | 모델 × 통계량 NRMSE 격자 (기간 선택) |
-| Taylor diagram | 상관계수·표준편차비·centred RMSE. **전체(Entire) 기간만** 그림. 색 = 기관 묶음(형제 모델은 같은 색의 밝기 차이), 모양 = 값 출처 |
+| Taylor diagram | 상관계수·표준편차비·centred RMSE. **전체(Entire) 기간만** 그림. 모델마다 다른 색이며, 같은 기관 모델끼리 비슷한 색 |
 | 순위 | 평균장·극값장·종합·순위합 기준 막대와 정렬 가능한 표 |
 | 평균장 대 극값장 | mean NRMSE 대 극값장 NRMSE 산점도와 Spearman ρ, p |
 | 기간별 순위 변화 | Entire → JJA → 6·7·8월 순위를 선으로 연결 |
@@ -57,15 +57,11 @@ CMIP6 전지구 기후모델(GCM) 21개가 북서태평양의 해면기압(psl)�
 | 편의, RMSE | Entire·JJA의 8개 모델만 |
 | 공간 격자값 | 없음 |
 
-Entire 기간의 Taylor 값은 `taylor_source`로 출처가 표시되어 있고, 뷰어는 이를 마커 모양으로 구분합니다.
-
-| taylor_source | 의미 | 마커 |
-|---|---|---|
-| `printed` | 분석 코드가 출력한 값 | ● 속이 찬 원 |
-| `digitized` | 그림에서 마커 위치를 추출 (±0.01) | ○ 속이 빈 원 |
-| `digitized_occluded` | 일부 가려진 마커를 추출 (±0.02~0.03) | ◇ 속이 빈 마름모 |
-| `digitized_hidden` | 완전히 가려져 덮은 마커 위치를 대신 사용 (**실제 위치 아님**) | ✕ |
-| (없음) | 출처 미표기 | □ 속이 빈 사각형 |
+Entire 기간의 Taylor 값에는 `taylor_source`로 출처가 적혀 있습니다
+(`printed` = 출력값, `digitized` = 그림 추출 ±0.01, `digitized_occluded` = 일부 가려짐 ±0.02~0.03,
+`digitized_hidden` = 완전히 가려져 덮은 마커 위치를 대신 사용).
+원본 결과로 교체하면 모두 출력값이 되므로, 뷰어는 출처를 따로 표시하지 않습니다.
+단, `digitized_hidden`인 점은 실제 위치가 아니므로 ✕ 마커와 경고 문구로 구분합니다.
 
 현재 `digitized_hidden`은 min 통계량의 EC-Earth3 하나이며, 상관계수·표준편차비가 EC-Earth3-Veg-LR과 같습니다.
 
