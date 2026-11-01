@@ -257,10 +257,8 @@ const App = (() => {
           <div class="chart-card"><div class="chart" id="ch-portrait"></div></div>
           <aside class="note">
             <h3>읽는 법</h3>
-            <p><b>NRMSE</b> = RMSE ÷ 해당 기간·통계량 ERA5 공간 표준편차. 0에 가까울수록 ERA5와 가깝고, 1이면 오차가 ERA5의 공간 변동 크기만큼 됩니다.</p>
+            <p><b>NRMSE</b> = RMSE ÷ 표준편차 → 0에 가까울수록 ERA5와 가까움.</p>
             <p>색이 진할수록 NRMSE가 큽니다(나쁨). 칸 안 숫자는 소수 둘째 자리이며, 마우스를 올리면 JSON 값이 그대로 보입니다.</p>
-            <p>색 범위는 기간마다 0부터 그 기간 최댓값까지입니다. 기간마다 분모(ERA5 표준편차)가 달라 <b>기간 사이 NRMSE를 직접 비교하면 안 됩니다</b>.</p>
-            <p>모델 칸을 누르면 모든 그림에서 그 모델이 강조됩니다.</p>
             <div id="portrait-ref"></div>
           </aside>
         </div>`,
@@ -269,19 +267,12 @@ const App = (() => {
           ${ctl("기간", tp.length ? `<select data-o="taylor.period">${opts(tp, o.taylor.period, Fmt.period)}</select>` : `<span class="muted">그릴 기간 없음</span>`)}
           ${ctl("통계량", `<select data-o="taylor.stat">${opts(D.stats, o.taylor.stat, Fmt.stat)}</select>`)}
         </div>
-        <p class="callout">Taylor diagram은 <b>${tp.map(Fmt.period).join(", ") || "—"}</b> 기간만 그립니다. 다른 기간은 상관계수·표준편차비가 일부 모델에만 있어 그리지 않습니다.</p>
         <div id="taylor-count" class="countline"></div>
         <div class="layout-2">
           <div class="chart-card"><div class="chart" id="ch-taylor"></div></div>
           <aside class="note">
             <h3>읽는 법</h3>
             <p>★ ERA5에 가까울수록 좋습니다. 원점에서의 거리 = <b>표준편차비</b>(모델 ÷ ERA5, 1이면 공간 변동 크기 일치), 각도 = <b>상관계수</b>(면적가중 공간 상관), 점선 호 = ERA5 표준편차로 나눈 <b>centred RMSE</b>(평균 편의를 뺀 RMSE).</p>
-            <h3>마커와 출처</h3>
-            <ul class="legend-list">
-              ${Object.entries(CONFIG.sources)
-                .map(([k, s]) => `<li><span class="sym sym-${k}"></span><b>${esc(s.label)}</b> — ${esc(s.error)}</li>`)
-                .join("")}
-            </ul>
             <div id="taylor-hidden"></div>
           </aside>
         </div>
@@ -408,33 +399,22 @@ const App = (() => {
     const lonTxt = Array.isArray(r.lon) ? `${r.lon[0]}–${r.lon[1]}°E` : "";
     const latTxt = Array.isArray(r.lat) ? `${r.lat[0]}–${r.lat[1]}°N` : "";
     $("#ov-body").innerHTML = `
-      <div class="layout-2 ov">
-        <div>
+      <div class="ov">
           <p class="lead">CMIP6 전지구 기후모델(GCM) ${D.models.length}개가 북서태평양(${esc(lonTxt)}, ${esc(latTxt)})의
           <b>${esc(D.varLong)} (${esc(D.varName)})</b>을(를) 얼마나 잘 재현하는지 ERA5 재분석 자료와 비교해 평가한 결과입니다.
           기간·통계량별 공간 오차(NRMSE), 상관계수, 표준편차비, 편의와 모델 순위를 탐색할 수 있습니다.</p>
           <div class="chart-card"><div class="chart" id="ch-map"></div></div>
           <p class="muted small">상자는 평가 영역입니다. 해안선: Natural Earth 1:50m.</p>
-        </div>
-        <aside class="note">
-          <h3>자료 상태</h3>
-          ${dl([
-            ["생성일", esc(M.generated)],
-            ["버전", esc(M.version)],
-            ["불러온 자료", esc(state.userFile ? `${state.userFile} (끌어다 놓은 파일)` : D.sourceLabel)],
-          ])}
-          <p class="status-text">${esc(M.data_status ?? "data_status 미표기")}</p>
-        </aside>
       </div>
       <h3>분석 설정</h3>
       ${dl([
         ["제목", esc(M.title)],
-        ["변수", esc(`${D.varName} — ${D.varLong} [${D.units}]`)],
-        ["기준 자료", esc(M.reference)],
+        ["변수", esc(`${D.varName} [${D.units}]`)],
+        ["기준 자료", esc(CONFIG.overview.reference ?? M.reference)],
         ["실험", esc(M.experiment)],
         ["기간", esc(M.period)],
-        ["영역", esc(`${lonTxt}, ${latTxt}`)],
-        ["공통 격자", esc(r.common_grid)],
+        ["영역", esc(CONFIG.overview.region ?? `${lonTxt}, ${latTxt}`)],
+        ["공통 격자", esc(CONFIG.overview.commonGrid ?? r.common_grid)],
         ["가중치", esc(r.weights)],
         ["품질 관리", esc(M.qc)],
         ["모델 선정", esc(M.model_selection)],

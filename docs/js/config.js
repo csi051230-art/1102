@@ -6,6 +6,19 @@ const CONFIG = {
   fallbackDataset: { id: "default", file: "data/viewer_data.json" },
   topojsonURL: "vendor/topojson/",
 
+  // 개요 [분석 설정]에 JSON 대신 보여줄 문구. null로 두면 JSON meta 값을 쓴다.
+  overview: {
+    reference: "ERA5",
+    region: "14~54°N, 114~154°E",
+    commonGrid: "1.875°×1.25° = 494 points",
+  },
+
+  // 비슷한 기관을 한 묶음으로 보는 규칙 (Taylor diagram 색). institution_id → 묶음 이름.
+  // 여기 없는 institution_id는 그 자체가 묶음 이름이다. 모델이 2개 이상인 묶음만 색을 받고, 나머지는 회색.
+  familyAlias: {
+    "CSIRO-ARCCSS": "CSIRO",
+  },
+
   // Taylor diagram을 그릴 기간. 원본 결과로 교체한 뒤 다른 기간도 그리려면 여기에 추가한다.
   taylorPeriods: ["Entire"],
 
