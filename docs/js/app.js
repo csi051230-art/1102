@@ -26,7 +26,6 @@ const App = (() => {
       meanext: { period: null },
       rankchange: { basis: "overall" },
       bias: { period: null, stat: null, sort: "name" },
-      resolution: { period: null, x: "mean", y: "rank:overall_rank", family: true },
     },
   };
 
@@ -133,7 +132,6 @@ const App = (() => {
     fixP(state.o.meanext);
     fixP(state.o.bias);
     fixS(state.o.bias);
-    fixP(state.o.resolution);
     const src = state.userFile ? `끌어다 놓은 파일: ${state.userFile}` : `기본 자료: ${D.sourceLabel}`;
     setStatus(`${src} · 모델 ${D.models.length}개 · 생성일 ${D.meta.generated ?? "미표기"}`);
     $("#resetData").hidden = !state.userFile;
@@ -470,31 +468,6 @@ const App = (() => {
           </aside>
         </div>`,
       },
-      resolution: {
-        controls: `
-          ${seg("resolution.period", D.periods, o.resolution.period)}
-          ${ctl("가로축", `<select data-o="resolution.x">${opts(["mean", "lon", "lat"], o.resolution.x, (v) => ({ mean: "경도·위도 평균", lon: "경도 간격", lat: "위도 간격" })[v])}</select>`)}
-          ${ctl("세로축", `<select data-o="resolution.y">${resYOptions()
-            .map(([v, l]) => `<option value="${v}"${v === o.resolution.y ? " selected" : ""}>${esc(l)}</option>`)
-            .join("")}</select>`)}
-          <label class="ctl check"><input type="checkbox" data-o="resolution.family"${o.resolution.family ? " checked" : ""}> <span>같은 기관 모델 잇기</span></label>`,
-        body: `
-        <div class="layout-2">
-          ${fig("ch-resolution")}
-          <aside class="warn-box">
-            <div class="card-title">⚠ 해석 주의</div>
-            <ul>
-              <li><b>참고용 탐색 그림</b>이며 인과관계를 뜻하지 않습니다.</li>
-              <li>모든 모델을 약 1.9° 공통 격자(19×26)로 옮겨 비교했으므로 <b>해상도 효과가 가려졌을 수 있습니다</b>.${
-                D.meta.region?.common_grid ? ` <span class="small" style="opacity:.8">(JSON: ${esc(D.meta.region.common_grid)})</span>` : ""
-              }</li>
-              <li>같은 기관의 형제 모델(EC-Earth3 계열 등)은 <b>서로 독립적이지 않습니다</b>. 점선은 같은 institution_id를 잇습니다.</li>
-            </ul>
-            <p style="margin:4px 0 0;opacity:.85">격자 간격은 모델 원래 격자의 값입니다. 같은 간격의 모델은 점이 겹칠 수 있으니 아래 표를 함께 보세요.</p>
-          </aside>
-        </div>
-        <details class="card"><summary>값 표 보기</summary><div id="resolution-table"></div></details>`,
-      },
     };
     $("#panels").innerHTML = CONFIG.tabs
       .map(
@@ -513,26 +486,12 @@ const App = (() => {
     );
   }
 
-  function resYOptions() {
-    const D = state.D;
-    return [
-      ...D.stats.map((s) => [`stat:${s}`, `NRMSE · ${Fmt.stat(s)}`]),
-      ["rank:mean_nrmse", "평균장 NRMSE"],
-      ["rank:ext_nrmse", "극값장 NRMSE"],
-      ["rank:overall_nrmse", "종합 NRMSE"],
-      ["rank:mean_rank", "평균장 순위"],
-      ["rank:ext_rank", "극값장 순위"],
-      ["rank:overall_rank", "종합 순위"],
-      ["rank:ranksum_rank", "순위합 순위"],
-    ];
-  }
-
   /* ---------- 그리기 ---------- */
   function render() {
     const D = state.D;
     if (!D) return;
     updateSelUI();
-    const fn = { overview, portrait, taylor, rank, meanext, rankchange, bias, resolution }[state.tab];
+    const fn = { overview, portrait, taylor, rank, meanext, rankchange, bias }[state.tab];
     const panel = $(`#panel-${state.tab}`);
     if (panel && state.tab !== "overview") {
       const na = !state.regionOK
@@ -568,7 +527,6 @@ const App = (() => {
       if (t === "rankchange") what = "순위와 Spearman ρ·p";
       if (t === "meanext") what = "Spearman ρ·p";
       if (t === "portrait" && o.portrait.order === "rank") what = "순위(정렬 기준)";
-      if (t === "resolution" && /_rank$/.test(o.resolution.y)) what = "순위";
     }
     el.hidden = !what;
     if (!what) return;
@@ -907,20 +865,6 @@ const App = (() => {
           ? `<p class="muted-p">세로 점선(JSON summary 중앙값): <b>자료 없음</b> — 선택한 모델로 다시 계산할 수 없어 그리지 않습니다 (21개 전체를 선택하면 표시).</p>`
           : ""
         : `<p class="muted-p">세로 점선은 JSON <code>summary.${esc(o.period)}.median.${esc(o.stat)}.bias</code> 값(${r.med} ${esc(D.units)})입니다. 어떤 모델 집합의 중앙값인지는 JSON에 적혀 있지 않습니다.</p>`;
-  }
-
-  function resolution() {
-    const D = state.D,
-      o = state.o.resolution;
-    const yLabel = (resYOptions().find(([v]) => v === o.y) || [, o.y])[1];
-    const rows = Charts.resolution($("#ch-resolution"), D, selection(), { ...o, yLabel }, toggleModel);
-    const xName = { mean: "격자 간격 평균 (계산값)", lon: "경도 간격", lat: "위도 간격" }[o.x];
-    const body = rows
-      .slice()
-      .sort((a, b) => a.x - b.x || a.m.localeCompare(b.m))
-      .map((r) => `<tr ${rowAttr(r.m)}><td><span class="model-cell">${dot(r.m)}${esc(r.m)}</span></td><td>${esc(r.inst)}</td><td class="num">${+r.x.toFixed(4)}</td><td class="num">${Fmt.raw(r.y)}</td></tr>`)
-      .join("");
-    $("#resolution-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>기관</th><th class="num">${xName} (°)</th><th class="num">${esc(yLabel)}</th></tr></thead><tbody>${body}</tbody></table></div>`;
   }
 
   return { init };

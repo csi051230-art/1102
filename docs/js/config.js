@@ -86,6 +86,5 @@ const CONFIG = {
     { id: "rankchange", label: "순위 변화" },
     { id: "meanext", label: "평균장-극한장 관계" },
     { id: "bias", label: "편의" },
-    { id: "resolution", label: "해상도 대 성능" },
   ],
 };
