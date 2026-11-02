@@ -395,7 +395,12 @@ const App = (() => {
           <aside>
             <div class="card">
               <div class="card-title">읽는 법</div>
-              <p>★ ERA5에 가까울수록 좋습니다. 원점에서의 거리 = <b>표준편차비</b>(모델 ÷ ERA5, 1이면 공간 변동 크기 일치), 각도 = <b>상관계수</b>(면적가중 공간 상관), 점선 호 = ERA5 표준편차로 나눈 <b>centred RMSE</b>(평균 편의를 뺀 RMSE).</p>
+              <p>모델 점이 ★ ERA5 기준점에 가까울수록 재현 성능이 좋습니다.</p>
+              <ul>
+                <li><b>원점에서의 거리 = 표준편차비</b><br>모델 ÷ ERA5. 1에 가까울수록 공간 변동 크기가 ERA5와 유사합니다.</li>
+                <li><b>각도 = 공간 상관계수</b><br>면적가중 공간 상관. 1에 가까울수록 공간 패턴이 ERA5와 유사합니다.</li>
+                <li><b>점선 호 = 정규화된 centred RMSE</b><br>평균 편의를 제거한 RMSE를 ERA5 표준편차로 나눈 값. 0에 가까울수록 오차가 작습니다.</li>
+              </ul>
             </div>
             <div id="taylor-hidden"></div>
           </aside>

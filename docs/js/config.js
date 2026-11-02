@@ -80,8 +80,8 @@ const CONFIG = {
 
   tabs: [
     { id: "overview", label: "개요" },
-    { id: "portrait", label: "Portrait plot" },
     { id: "taylor", label: "Taylor diagram" },
+    { id: "portrait", label: "Portrait plot" },
     { id: "rank", label: "순위" },
     { id: "rankchange", label: "순위 변화" },
     { id: "meanext", label: "평균장-극한장 관계" },
