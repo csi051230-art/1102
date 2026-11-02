@@ -371,3 +371,39 @@ button.sort[aria-sort="ascending"], button.sort[aria-sort="descending"] { color:
   dl.meta dt { padding: 6px 0 0; border-bottom: 0; }
   dl.meta dd { padding: 0 0 6px; }
 }
+
+/* ---------- 패널 안: 자료 없음 자리, 다시 계산 안내 ---------- */
+.pbody { display: flex; flex-direction: column; gap: 16px; }
+.na-block {
+  padding: 48px 20px; text-align: center; font-size: 15px; color: var(--text-secondary);
+  border: 1px dashed var(--divider);
+}
+.recalc {
+  padding: 8px 12px; font-size: 13px; color: var(--warn-ink);
+  background: var(--warn-bg); border-left: 3px solid var(--accent);
+}
+
+/* ---------- 개요: 평가 영역, 모델 선택 ---------- */
+.btn-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); }
+.region-card .rrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.region-card .rlab { width: 36px; font-size: 12px; color: var(--text-secondary); }
+.region-card .num-in { width: 9.5em; font-variant-numeric: tabular-nums; }
+.region-card .unit { font-size: 12px; color: var(--text-secondary); }
+.region-card .ractions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.region-msg { font-size: 13px; font-weight: 600; }
+.region-msg.ok { color: var(--accent-text); }
+.region-msg.bad, .region-msg.err { color: var(--div-pos); }
+.pick-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.pick-btns { display: flex; gap: 6px; }
+.pick-groups { display: flex; flex-direction: column; }
+.pick-group { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--rule); }
+.pick-fam { font-size: 11px; color: var(--text-muted); padding-top: 3px; word-break: break-word; }
+.pick-items { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.pick { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.pick input { width: 15px; height: 15px; accent-color: var(--accent); margin: 0; }
+@media (max-width: 759px) {
+  .pick-group { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .region-card .num-in { width: 7.2em; }
+  .region-card .rlab { width: 28px; }
+}

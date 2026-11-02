@@ -89,9 +89,10 @@ const Charts = (() => {
   }
 
   /* ---------- 1. 연구 영역 지도 ---------- */
-  function regionMap(gd, D) {
+  // box: 적용한 평가 영역 { lat, lon }. 없으면 JSON meta.region
+  function regionMap(gd, D, box) {
     const t = theme();
-    const r = CONFIG.overview.regionBox || D.meta.region || {};
+    const r = box || D.meta.region || {};
     const traces = [];
     let lonRange = [95, 170],
       latRange = [5, 65];
@@ -254,7 +255,8 @@ const Charts = (() => {
       const id = D.model(m)?.institution_id || m;
       return CONFIG.familyAlias[id] || id;
     };
-    const ids = D.modelIds;
+    // 색은 전체 모델 순서로 정한다 (모델을 골라 숨겨도 색이 바뀌지 않게)
+    const ids = D.allModelIds || D.modelIds;
     const members = {};
     ids.forEach((m) => (members[famOf(m)] = members[famOf(m)] || []).push(m));
     const N = ids.length;

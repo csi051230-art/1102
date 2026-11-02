@@ -9,9 +9,6 @@ const CONFIG = {
   // 개요 [분석 설정]에 JSON 대신 보여줄 문구. null로 두면 JSON meta 값을 쓴다.
   overview: {
     reference: "ERA5",
-    region: "14~54°N, 114~154°E",
-    // 개요 지도에 그릴 영역 상자 [도]. null로 두면 JSON meta.region의 lon·lat을 쓴다.
-    regionBox: { lon: [114, 154], lat: [14, 54] },
     commonGrid: "1.875°×1.25° = 494 points",
   },
 

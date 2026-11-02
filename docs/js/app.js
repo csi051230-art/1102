@@ -9,7 +9,13 @@ const App = (() => {
     datasets: [], // datasets.json 목록
     cache: {}, // id -> wrapped data
     varId: null,
-    D: null,
+    D: null, // 화면에 쓰는 자료 보기 (선택한 모델만)
+    base: null, // 불러온 원래 자료 (21개 전체)
+    visible: null, // 선택한 모델 (보이는 모델)
+    region: null, // 적용한 평가 영역 { lat: [a, b], lon: [a, b] }
+    regionInput: null, // 입력칸 글자 (다시 그려도 유지)
+    regionOK: true, // 적용한 영역이 JSON의 계산 영역과 같은지
+    regionMsg: null,
     userFile: null, // 끌어다 놓은 파일 이름
     tab: "overview",
     sel: [], // 강조한 모델 (누른 순서)
@@ -103,8 +109,14 @@ const App = (() => {
   }
 
   function setData(D) {
-    state.D = D;
-    state.sel = state.sel.filter((m) => D.modelIds.includes(m));
+    state.base = D;
+    // 선택 모델: 새 자료에 있는 것만 남기고, 하나도 없으면 전체 선택
+    const keep = (state.visible || []).filter((m) => D.modelIds.includes(m));
+    state.visible = keep.length ? keep : D.modelIds.slice();
+    // 평가 영역: 새 자료의 계산 영역으로 시작
+    resetRegion(false);
+    state.D = Subset.view(D, state.visible);
+    state.sel = state.sel.filter((m) => state.visible.includes(m));
     const P0 = D.periods[0],
       S0 = D.stats[0];
     const fixP = (o, list = D.periods) => {
@@ -128,6 +140,56 @@ const App = (() => {
     fillModelSelect();
     buildPanels();
     showTab(state.tab, true);
+  }
+
+  /* ---------- 평가 영역 ---------- */
+  function computedRegion(D = state.base) {
+    const r = D?.meta?.region || {};
+    return Array.isArray(r.lat) && Array.isArray(r.lon) ? { lat: [r.lat[0], r.lat[1]], lon: [r.lon[0], r.lon[1]] } : null;
+  }
+  const regionText = (g) => `위도 ${g.lat[0]} ~ ${g.lat[1]} °N, 경도 ${g.lon[0]} ~ ${g.lon[1]} °E`;
+  // 네 값이 모두 숫자로 정확히 같을 때만 계산된 영역
+  const sameRegion = (a, b) => !!a && !!b && a.lat[0] === b.lat[0] && a.lat[1] === b.lat[1] && a.lon[0] === b.lon[0] && a.lon[1] === b.lon[1];
+
+  function resetRegion(redraw = true) {
+    const c = computedRegion();
+    state.region = c;
+    state.regionInput = c ? { latA: String(c.lat[0]), latB: String(c.lat[1]), lonA: String(c.lon[0]), lonB: String(c.lon[1]) } : { latA: "", latB: "", lonA: "", lonB: "" };
+    state.regionOK = !!c;
+    state.regionMsg = c ? { kind: "ok", text: "✓ 계산된 영역입니다." } : { kind: "bad", text: "JSON에 계산 영역(meta.region)이 없습니다." };
+    if (redraw) render();
+  }
+
+  function applyRegion() {
+    const ids = ["latA", "latB", "lonA", "lonB"];
+    const txt = Object.fromEntries(ids.map((k) => [k, ($(`#rg-${k}`)?.value ?? "").trim()]));
+    state.regionInput = txt;
+    const n = Object.fromEntries(ids.map((k) => [k, txt[k] === "" ? NaN : Number(txt[k])]));
+    let err = "";
+    if (ids.some((k) => !Number.isFinite(n[k]))) err = "네 칸 모두 숫자를 입력하세요.";
+    else if (n.latA >= n.latB || n.lonA >= n.lonB) err = "시작값은 끝값보다 작아야 합니다.";
+    else if (n.latA < -90 || n.latB > 90) err = "위도는 −90 ~ 90 사이여야 합니다.";
+    else if (n.lonA < -180 || n.lonB > 360) err = "경도는 −180 ~ 360 사이여야 합니다.";
+    if (err) {
+      state.regionMsg = { kind: "err", text: `적용하지 않았습니다: ${err}` };
+      render();
+      return;
+    }
+    state.region = { lat: [n.latA, n.latB], lon: [n.lonA, n.lonB] };
+    state.regionOK = sameRegion(state.region, computedRegion());
+    state.regionMsg = state.regionOK
+      ? { kind: "ok", text: "✓ 계산된 영역입니다." }
+      : { kind: "bad", text: "✕ 이 영역은 아직 계산되지 않았습니다. 다른 화면에는 '자료 없음'이 표시됩니다." };
+    render();
+  }
+
+  /* ---------- 모델 선택 (보이는 모델) ---------- */
+  function setVisible(ids) {
+    const all = state.base.modelIds;
+    state.visible = all.filter((m) => ids.includes(m));
+    state.D = Subset.view(state.base, state.visible);
+    state.sel = state.sel.filter((m) => state.visible.includes(m)); // 숨긴 모델은 강조에서도 뺀다
+    render();
   }
 
   function setStatus(msg, err = false) {
@@ -262,6 +324,25 @@ const App = (() => {
         e.preventDefault();
         toggleModel(tr.dataset.model);
       }
+    });
+    // 개요: 평가 영역과 모델 선택
+    $("#panels").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-act]");
+      if (!b) return;
+      const act = b.dataset.act;
+      if (act === "region-apply") applyRegion();
+      if (act === "region-reset") resetRegion();
+      if (act === "pick-all") setVisible(state.base.modelIds);
+      if (act === "pick-none") setVisible([]);
+    });
+    $("#panels").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && e.target.matches?.("input[id^='rg-']")) applyRegion();
+    });
+    $("#panels").addEventListener("change", (e) => {
+      const c = e.target.closest("input[data-pick]");
+      if (!c) return;
+      const ids = [...$("#panels").querySelectorAll("input[data-pick]:checked")].map((x) => x.dataset.pick);
+      setVisible(ids);
     });
     let rt;
     window.addEventListener("resize", () => {
@@ -419,7 +500,8 @@ const App = (() => {
       .map(
         (t) => `<section class="panel" id="panel-${t.id}" role="tabpanel" aria-labelledby="tab-${t.id}" hidden>
           <div class="panel-head"><h2>${esc(t.label)}</h2><div class="controls">${panels[t.id].controls}</div></div>
-          ${panels[t.id].body}</section>`
+          <div class="na-block" hidden></div>
+          <div class="pbody"><div class="recalc" hidden></div>${panels[t.id].body}</div></section>`
       )
       .join("");
     $("#panels").querySelectorAll("[data-o]").forEach((el) =>
@@ -451,12 +533,106 @@ const App = (() => {
     if (!D) return;
     updateSelUI();
     const fn = { overview, portrait, taylor, rank, meanext, rankchange, bias, resolution }[state.tab];
+    const panel = $(`#panel-${state.tab}`);
+    if (panel && state.tab !== "overview") {
+      const na = !state.regionOK
+        ? "자료 없음: 이 영역은 아직 계산되지 않았습니다"
+        : !D.modelIds.length
+          ? "자료 없음: 선택한 모델이 없습니다 (개요에서 모델을 고르세요)"
+          : "";
+      panel.querySelector(".na-block").hidden = !na;
+      panel.querySelector(".na-block").textContent = na;
+      panel.querySelector(".pbody").hidden = !!na;
+      if (na) return;
+    }
     try {
       fn();
+      recalcNote(panel);
     } catch (e) {
       console.error(e);
       setStatus(`그림을 그리는 중 오류: ${e.message}`, true);
     }
+  }
+
+  // 다시 계산한 값이 화면에 쓰이면 안내를 띄운다
+  function recalcNote(panel) {
+    const el = panel?.querySelector(".recalc");
+    if (!el) return;
+    const D = state.D,
+      n = D.modelIds.length;
+    let what = "";
+    if (D.subset) {
+      const t = state.tab,
+        o = state.o;
+      if (t === "rank") what = "순위";
+      if (t === "rankchange") what = "순위와 Spearman ρ·p";
+      if (t === "meanext") what = "Spearman ρ·p";
+      if (t === "portrait" && o.portrait.order === "rank") what = "순위(정렬 기준)";
+      if (t === "resolution" && /_rank$/.test(o.resolution.y)) what = "순위";
+    }
+    el.hidden = !what;
+    if (!what) return;
+    const few = [];
+    if (/순위/.test(what) && n < Subset.MIN_RANK) few.push(`순위는 모델 ${Subset.MIN_RANK}개 이상`);
+    if (/Spearman/.test(what) && n < Subset.MIN_SPEARMAN) few.push(`Spearman은 모델 ${Subset.MIN_SPEARMAN}개 이상`);
+    el.innerHTML = `선택한 ${n}개 모델 기준으로 다시 계산한 ${esc(what)}입니다. NRMSE 등 원래 값은 JSON 그대로입니다.${few.length ? ` <b>${few.join(", ")}이 필요해 '자료 없음'으로 표시합니다.</b>` : ""}`;
+  }
+
+  function regionCard() {
+    const c = computedRegion(),
+      v = state.regionInput,
+      msg = state.regionMsg || { kind: "ok", text: "" };
+    const inp = (k, label) =>
+      `<input id="rg-${k}" class="input num-in" type="text" inputmode="decimal" autocomplete="off" aria-label="${label}" value="${esc(v[k])}">`;
+    return `<div class="card region-card">
+      <div class="card-title">평가 영역</div>
+      <div class="rrow"><span class="rlab">위도</span>${inp("latA", "위도 시작")}<span>~</span>${inp("latB", "위도 끝")}<span class="unit">°N</span></div>
+      <div class="rrow"><span class="rlab">경도</span>${inp("lonA", "경도 시작")}<span>~</span>${inp("lonB", "경도 끝")}<span class="unit">°E</span></div>
+      <div class="ractions">
+        <button type="button" class="btn btn-primary" data-act="region-apply">적용</button>
+        <button type="button" class="btn" data-act="region-reset">현재 계산 영역으로 되돌리기</button>
+      </div>
+      <p class="muted-p small">현재 계산 영역: ${c ? esc(regionText(c)) : "JSON에 없음"}. 네 값이 이 값과 숫자로 정확히 같을 때만 계산된 영역으로 봅니다.</p>
+      <p class="region-msg ${msg.kind}" aria-live="polite">${esc(msg.text)}</p>
+    </div>`;
+  }
+
+  function pickCard() {
+    const B = state.base,
+      all = B.modelIds,
+      on = new Set(state.visible);
+    const famOf = (m) => {
+      const id = B.model(m)?.institution_id || m;
+      return CONFIG.familyAlias[id] || id;
+    };
+    const groups = [];
+    all.forEach((m) => {
+      const f = famOf(m);
+      let g = groups.find((x) => x.f === f);
+      if (!g) groups.push((g = { f, ms: [] }));
+      g.ms.push(m);
+    });
+    const colors = Charts.modelColors(B);
+    return `<div class="card pick-card">
+      <div class="pick-head">
+        <div class="card-title">모델 선택 <span class="muted">${all.length}개 중 ${on.size}개</span></div>
+        <div class="pick-btns">
+          <button type="button" class="btn small" data-act="pick-all">전체 선택</button>
+          <button type="button" class="btn small" data-act="pick-none">전체 해제</button>
+        </div>
+      </div>
+      <p class="muted-p small">선택한 모델만 모든 화면에 나옵니다. 왼쪽 "모델 강조"는 보이는 모델 중에서 눈에 띄게 할 모델을 고르는 것으로, 선택과는 따로 동작합니다.</p>
+      <div class="pick-groups">${groups
+        .map(
+          (g) => `<div class="pick-group"><span class="pick-fam">${esc(g.f)}</span><div class="pick-items">${g.ms
+            .map(
+              (m) =>
+                `<label class="pick"><input type="checkbox" data-pick="${esc(m)}"${on.has(m) ? " checked" : ""}><span class="dot" style="background:${colors[m]}"></span>${esc(m)}</label>`
+            )
+            .join("")}</div></div>`
+        )
+        .join("")}</div>
+    </div>`;
   }
 
   function overview() {
@@ -477,16 +653,17 @@ const App = (() => {
     $("#ov-body").innerHTML = `
       <div class="ov-grid">
         <div class="card lead-card">
-          <p class="lead">CMIP6 전지구 기후모델(GCM) ${D.models.length}개의 북서태평양 ${esc(CONFIG.varNames[D.varName] ?? D.varLong)}(${esc(D.varName)}) 재현 성능을 ERA5 재분석 자료와 비교해 평가했습니다.</p>
-          <p class="lead2">기간과 통계량에 따라 공간 오차(NRMSE), 상관계수, 표준편차비, 편의 및 모델 순위를 확인할 수 있습니다.</p>
+          <p class="lead">CMIP6 전지구 기후모델(GCM) ${state.base.models.length}개가 북서태평양 ${esc(CONFIG.varNames[D.varName] ?? D.varLong)}(${esc(D.varName)})을 얼마나 잘 재현하는지 ERA5 재분석 자료와 비교해 평가했습니다.</p>
+          <p class="lead2">평가 기간은 1979–2014년이며, 기간과 통계량에 따라 공간 오차(NRMSE), 상관계수, 표준편차비, 편의와 모델 순위를 확인할 수 있습니다.</p>
           <div class="facts">
-            <div><span>평가 영역</span><strong>${esc(CONFIG.overview.region ?? `${latTxt}, ${lonTxt}`)}</strong></div>
-            <div><span>모델</span><strong>${D.models.length}개</strong></div>
+            <div><span>평가 영역</span><strong>${state.region ? esc(`${state.region.lat[0]}~${state.region.lat[1]}°N, ${state.region.lon[0]}~${state.region.lon[1]}°E`) : "자료 없음"}</strong></div>
+            <div><span>모델</span><strong>${D.models.length === state.base.models.length ? `${D.models.length}개` : `${D.models.length}개 선택 (전체 ${state.base.models.length}개)`}</strong></div>
             <div><span>기준 자료</span><strong>${esc(CONFIG.overview.reference ?? M.reference)}</strong></div>
           </div>
         </div>
-        <figure class="blueprint">${corners}<div class="chart" id="ch-map"></div><figcaption>상자는 평가 영역입니다. 해안선: Natural Earth 1:50m.</figcaption></figure>
+        <figure class="blueprint">${corners}<div class="chart" id="ch-map"></div><figcaption>상자는 적용한 평가 영역입니다${state.regionOK ? "" : " (아직 계산되지 않은 영역)"}. 해안선: Natural Earth 1:50m.</figcaption></figure>
       </div>
+      <div class="ov-grid">${regionCard()}${pickCard()}</div>
       <div class="ov-grid">
         <details class="card plain" data-k="settings"${openSet ? " open" : ""}><summary>분석 설정</summary>
         ${dl([
@@ -495,7 +672,7 @@ const App = (() => {
           ["기준 자료", esc(CONFIG.overview.reference ?? M.reference)],
           ["실험", esc(M.experiment)],
           ["기간", esc(M.period)],
-          ["영역", esc(CONFIG.overview.region ?? `${lonTxt}, ${latTxt}`)],
+          ["영역", esc(`${lonTxt}, ${latTxt}`)],
           ["공통 격자", esc(CONFIG.overview.commonGrid ?? r.common_grid)],
           ["가중치", esc(r.weights)],
           ["품질 관리", esc(M.qc)],
@@ -522,7 +699,7 @@ const App = (() => {
         <div class="card-title">모델 정보 <span class="muted">(행을 누르면 강조)</span></div>
         <div class="table-scroll">${modelTable()}</div>
       </div>`;
-    Charts.regionMap($("#ch-map"), D);
+    Charts.regionMap($("#ch-map"), D, state.region);
   }
 
   function modelTable() {
@@ -570,7 +747,7 @@ const App = (() => {
     const total = D.modelIds.length;
     const missing = D.modelIds.filter((m) => !pts.some((q) => q.m === m));
     $("#taylor-count").innerHTML =
-      `<b>${total}개 중 ${pts.length}개 표시</b>${
+      `<b>${D.subset ? "선택한 " : ""}${total}개 중 ${pts.length}개 표시</b>${
         pts.some((q) => q.src === "digitized_hidden") ? ` <span class="badge">이 중 ${pts.filter((q) => q.src === "digitized_hidden").length}개는 실제 위치 아님</span>` : ""
       } · ${esc(Fmt.period(o.period))} · ${esc(Fmt.stat(o.stat))}` +
       (missing.length ? `<br><span class="muted">자료 없음: ${missing.map(esc).join(", ")}</span>` : "");
@@ -695,7 +872,7 @@ const App = (() => {
       p = Data.num(sp?.p);
     $("#meanext-stat").innerHTML = `<div class="big">Spearman ρ = ${rho === null ? Fmt.NA : rho}</div>
       <div>p = ${Fmt.p(p)}</div>
-      <div class="muted small">${esc(Fmt.period(o.period))} · 모델 ${n}개 · 값은 JSON summary에 적힌 그대로입니다.</div>`;
+      <div class="muted small">${esc(Fmt.period(o.period))} · 모델 ${n}개 · ${D.subset ? "선택한 모델로 다시 계산한 값입니다." : "값은 JSON summary에 적힌 그대로입니다."}</div>`;
   }
 
   function rankchange() {
@@ -713,7 +890,7 @@ const App = (() => {
       })
       .join("");
     $("#rankchange-stat").innerHTML = rows
-      ? `<div class="card-title" style="margin-top:10px">Entire 순위와의 Spearman ρ</div><table class="data compact"><thead><tr><th>기간</th><th class="num">평균장</th><th class="num">극값장</th></tr></thead><tbody>${rows}</tbody></table><p class="table-note">JSON summary 값.</p>`
+      ? `<div class="card-title" style="margin-top:10px">Entire 순위와의 Spearman ρ</div><table class="data compact"><thead><tr><th>기간</th><th class="num">평균장</th><th class="num">극값장</th></tr></thead><tbody>${rows}</tbody></table><p class="table-note">${D.subset ? `선택한 ${D.modelIds.length}개 모델로 다시 계산한 값.` : "JSON summary 값."}</p>`
       : "";
   }
 
@@ -726,7 +903,9 @@ const App = (() => {
     }`;
     $("#bias-med").innerHTML =
       r.med === null
-        ? ""
+        ? D.subset
+          ? `<p class="muted-p">세로 점선(JSON summary 중앙값): <b>자료 없음</b> — 선택한 모델로 다시 계산할 수 없어 그리지 않습니다 (21개 전체를 선택하면 표시).</p>`
+          : ""
         : `<p class="muted-p">세로 점선은 JSON <code>summary.${esc(o.period)}.median.${esc(o.stat)}.bias</code> 값(${r.med} ${esc(D.units)})입니다. 어떤 모델 집합의 중앙값인지는 JSON에 적혀 있지 않습니다.</p>`;
   }
 
