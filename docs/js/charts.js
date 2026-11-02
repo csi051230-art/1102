@@ -91,7 +91,7 @@ const Charts = (() => {
   /* ---------- 1. 연구 영역 지도 ---------- */
   function regionMap(gd, D) {
     const t = theme();
-    const r = D.meta.region || {};
+    const r = CONFIG.overview.regionBox || D.meta.region || {};
     const traces = [];
     let lonRange = [95, 170],
       latRange = [5, 65];
@@ -162,7 +162,16 @@ const Charts = (() => {
     const z = [],
       text = [],
       cd = [];
+    // 색 범위: 모든 기간·통계량에서 같은 범위 (0 ~ 전체 최댓값)
     let zmax = 0;
+    D.periods.forEach((pp) =>
+      D.stats.forEach((s) =>
+        D.modelIds.forEach((m) => {
+          const v = D.metric(pp, s, m, "nrmse");
+          if (v !== null) zmax = Math.max(zmax, v);
+        })
+      )
+    );
     order.forEach((m) => {
       const row = [],
         tr = [],
@@ -172,7 +181,6 @@ const Charts = (() => {
         row.push(v);
         tr.push(v === null ? "" : v.toFixed(2));
         cr.push([m, Fmt.stat(s), Fmt.raw(v)]);
-        if (v !== null) zmax = Math.max(zmax, v);
       });
       z.push(row);
       text.push(tr);
