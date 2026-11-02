@@ -14,42 +14,58 @@
       document.documentElement.dataset.resolvedTheme = d ? "dark" : "light";
     })();
   </script>
+  <link rel="preload" href="vendor/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="vendor/fonts/barlow-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="banner" role="note">
-    <b>임시 자료</b>: 분석 그림과 출력값에서 옮겨 적은 값이며 원본 결과로 교체 예정
-  </div>
-
   <header class="top">
     <div class="title">
-      <h1>CMIP6 GCM 재현성 뷰어 <span class="sub">북서태평양 · ERA5 비교</span></h1>
-      <p id="dataStatus" class="data-status" aria-live="polite">자료를 불러오는 중…</p>
+      <h1>CMIP6 GCM 재현성 뷰어</h1>
+      <span class="sub">북서태평양 · ERA5 비교</span>
     </div>
     <div class="toolbar">
-      <label class="ctl"><span>변수</span><select id="varSelect" aria-label="변수 선택"></select></label>
-      <label class="ctl"><span>모델 강조 (여러 개 가능)</span><select id="modelSelect" aria-label="강조할 모델 추가 또는 해제"></select></label>
-      <label class="btn file-btn" title="같은 구조의 JSON 파일을 열거나 화면에 끌어다 놓으세요. 파일은 브라우저 안에서만 읽습니다.">
+      <label class="ctl-inline">변수 <select id="varSelect" class="input" aria-label="변수 선택"></select></label>
+      <label class="btn btn-secondary file-btn" title="같은 구조의 JSON 파일을 열거나 화면에 끌어다 놓으세요. 파일은 브라우저 안에서만 읽습니다.">
         JSON 열기<input id="fileInput" type="file" accept=".json,application/json" hidden>
       </label>
-      <button id="resetData" class="btn" hidden>기본 자료로</button>
-      <button id="themeBtn" class="btn" aria-label="밝은/어두운 모드 전환">◐ 자동</button>
+      <button id="resetData" class="btn btn-secondary" hidden>기본 자료로</button>
+      <button id="themeBtn" class="btn btn-secondary theme-btn" aria-label="밝은/어두운 모드 전환">◐ 자동</button>
     </div>
   </header>
 
-  <nav id="tabs" class="tabs" role="tablist" aria-label="화면"></nav>
-
-  <div id="selChip" class="sel-chip" hidden>
-    <span class="sel-label">강조 중</span>
-    <span id="selList" class="sel-list"></span>
-    <button id="selClear" class="btn small" aria-label="강조 모두 해제">모두 해제</button>
+  <div class="banner" role="note">
+    <span><b>임시 자료</b>: 분석 그림과 출력값에서 옮겨 적은 값이며 원본 결과로 교체 예정</span>
+    <span id="dataStatus" class="data-status" aria-live="polite">자료를 불러오는 중…</span>
   </div>
 
-  <main id="panels"></main>
+  <div class="shell">
+    <aside class="rail">
+      <nav id="tabs" class="tabs" role="tablist" aria-label="화면"></nav>
+
+      <!-- 넓은 화면: 모델 목록에서 바로 강조 -->
+      <div class="rail-models">
+        <div class="rail-head">
+          <span class="kicker">모델 강조 · <span id="selCount">0</span></span>
+          <button id="selClear" class="btn btn-ghost small" aria-label="강조 모두 해제" hidden>모두 해제</button>
+        </div>
+        <div id="modelRail" class="model-rail" role="listbox" aria-multiselectable="true" aria-label="강조할 모델"></div>
+      </div>
+
+      <!-- 좁은 화면: 선택 메뉴와 칩 -->
+      <div class="narrow-models">
+        <select id="modelSelect" class="input" aria-label="강조할 모델 추가 또는 해제"></select>
+        <button id="selClear2" class="btn btn-ghost small" aria-label="강조 모두 해제" hidden>모두 해제</button>
+        <span id="selList" class="sel-list"></span>
+      </div>
+    </aside>
+
+    <main id="panels"></main>
+  </div>
 
   <footer class="foot">
     <p>파일을 화면에 끌어다 놓으면 같은 구조의 다른 JSON으로 바꿔 볼 수 있습니다 (파일은 서버로 전송되지 않습니다).</p>
-    <p>그림: <a href="https://plotly.com/javascript/" rel="noopener">Plotly.js</a> 4.2.0 (MIT) · 해안선: <a href="https://www.naturalearthdata.com/" rel="noopener">Natural Earth</a> (public domain)</p>
+    <p>그림: <a href="https://plotly.com/javascript/" rel="noopener">Plotly.js</a> 4.2.0 (MIT) · 해안선: <a href="https://www.naturalearthdata.com/" rel="noopener">Natural Earth</a> (public domain) · 글꼴: <a href="https://github.com/jpt/barlow" rel="noopener">Barlow</a> (SIL OFL 1.1)</p>
   </footer>
 
   <div id="dropOverlay" class="drop-overlay" hidden><div>JSON 파일을 놓으세요<br><small>브라우저 안에서만 읽습니다</small></div></div>

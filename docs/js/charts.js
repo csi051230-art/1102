@@ -19,10 +19,10 @@ const Charts = (() => {
       series: g("--series-1"),
       seriesSoft: g("--series-1-soft"),
       accent: g("--accent"),
-      selColors: g("--sel").split(",").map((s) => s.trim()).filter(Boolean),
       pos: g("--div-pos"),
       neg: g("--div-neg"),
       land: g("--land"),
+      coast: g("--coast"),
       ocean: g("--ocean"),
       seq: g("--seq").split(",").map((s) => s.trim()),
       font: g("--font"),
@@ -137,7 +137,7 @@ const Charts = (() => {
         lonaxis: { range: lonRange, showgrid: true, gridcolor: t.grid, dtick: 10 },
         lataxis: { range: latRange, showgrid: true, gridcolor: t.grid, dtick: 10 },
         showcoastlines: true,
-        coastlinecolor: t.text2,
+        coastlinecolor: t.coast,
         coastlinewidth: 0.8,
         showland: true,
         landcolor: t.land,
@@ -251,13 +251,15 @@ const Charts = (() => {
     ids.forEach((m) => (members[famOf(m)] = members[famOf(m)] || []).push(m));
     const N = ids.length;
     const color = {};
+    const dark = document.documentElement.dataset.resolvedTheme === "dark";
     ids.forEach((m, i) => {
       const h = N > 1 ? (335 * i) / (N - 1) : 0;
       const sib = members[famOf(m)];
       const j = sib.indexOf(m),
         n = sib.length;
-      const l = n > 1 ? 62 - (22 * j) / (n - 1) : 52;
-      color[m] = `hsl(${h.toFixed(1)}, 72%, ${l.toFixed(1)}%)`;
+      // 어두운 모드에서는 바탕이 짙으므로 조금 밝게
+      const l = (n > 1 ? 62 - (22 * j) / (n - 1) : 52) + (dark ? 6 : 0);
+      color[m] = `hsl(${h.toFixed(1)}, 60%, ${l.toFixed(1)}%)`;
     });
     return color;
   }
@@ -428,7 +430,7 @@ const Charts = (() => {
         },
       },
       annotations: [
-        { text: "호의 눈금 = 상관계수", xref: "paper", yref: "paper", x: 0, xanchor: "left", y: 1.04, showarrow: false, font: { color: t.text2, size: 11 } },
+        { text: "호의 눈금 = 상관계수", xref: "paper", yref: "paper", x: 0.12, xanchor: "left", y: 1.05, showarrow: false, font: { color: t.text2, size: 11 } },
       ],
     });
     draw(gd, traces, lay, onModel);

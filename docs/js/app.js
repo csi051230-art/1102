@@ -165,17 +165,17 @@ const App = (() => {
     render();
   }
 
-  // 강조 상태를 그림 함수에 넘기는 형태. 색은 누른 순서대로 고정 배정한다.
+  // 강조 상태를 그림 함수에 넘기는 형태. 강조 색 = 모델 고유색 (모든 그림에서 같다).
   function selection() {
     const list = state.sel.slice();
-    const pal = Charts.theme().selColors;
-    const color = (m) => {
-      const i = list.indexOf(m);
-      return i < 0 ? null : pal[i % pal.length];
-    };
-    return { list, size: list.length, has: (m) => list.includes(m), color };
+    const colors = Charts.modelColors(state.D);
+    return { list, size: list.length, has: (m) => list.includes(m), color: (m) => (list.includes(m) ? colors[m] : null) };
   }
   const isSel = (m) => state.sel.includes(m);
+  // 표 행·목록 공통: 모델 색 점, 강조 표시
+  const colorOf = (m) => Charts.modelColors(state.D)[m];
+  const dot = (m) => `<span class="dot" style="background:${colorOf(m)}"></span>`;
+  const rowAttr = (m) => `data-model="${esc(m)}" tabindex="0" class="${isSel(m) ? "sel" : ""}" style="--mark:${colorOf(m)}"`;
 
   function fillModelSelect() {
     const s = $("#modelSelect");
@@ -187,12 +187,17 @@ const App = (() => {
 
   function updateSelUI() {
     const S = selection();
-    $("#selChip").hidden = !S.size;
-    $("#selList").innerHTML = S.list
+    $("#selCount").textContent = S.size;
+    $("#selClear").hidden = !S.size;
+    $("#selClear2").hidden = !S.size;
+    $("#modelRail").innerHTML = state.D.modelIds
       .map(
         (m) =>
-          `<button type="button" class="chip" data-model="${esc(m)}" title="강조 해제"><span class="dot" style="background:${S.color(m)}"></span>${esc(m)} ✕</button>`
+          `<button type="button" role="option" data-model="${esc(m)}" aria-selected="${isSel(m)}" style="--mark:${colorOf(m)}">${dot(m)}<span>${esc(m)}</span></button>`
       )
+      .join("");
+    $("#selList").innerHTML = S.list
+      .map((m) => `<button type="button" class="chip" data-model="${esc(m)}" title="강조 해제">${dot(m)}${esc(m)} ✕</button>`)
       .join("");
     fillModelSelect();
   }
@@ -209,11 +214,13 @@ const App = (() => {
     $("#modelSelect").addEventListener("change", (e) => {
       if (e.target.value) toggleModel(e.target.value);
     });
-    $("#selClear").addEventListener("click", () => {
+    const clearSel = () => {
       state.sel = [];
       updateSelUI();
       render();
-    });
+    };
+    $("#selClear").addEventListener("click", clearSel);
+    $("#selClear2").addEventListener("click", clearSel);
     $("#fileInput").addEventListener("change", (e) => {
       if (e.target.files[0]) loadUserFile(e.target.files[0]);
       e.target.value = "";
@@ -266,127 +273,154 @@ const App = (() => {
   /* ---------- 패널 뼈대 ---------- */
   const opts = (list, cur, lab = (x) => x) => list.map((v) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(lab(v))}</option>`).join("");
   const ctl = (label, html) => `<label class="ctl"><span>${label}</span>${html}</label>`;
+  // 버튼 묶음(세그먼트): 기간·기준 고르기. 바뀐 값은 data-o로 state.o에 들어간다.
+  const seg = (key, list, cur, lab = (x) => x) =>
+    `<div class="ctl"><span>${key.endsWith("basis") ? (key.startsWith("rank.") ? "기준" : "순위 기준") : "기간"}</span><div class="seg" role="radiogroup">${list
+      .map((v) => `<label class="seg-opt"><input type="radio" name="${key}" value="${esc(v)}" data-o="${key}"${v === cur ? " checked" : ""}>${esc(lab(v))}</label>`)
+      .join("")}</div></div>`;
+  const corners = `<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>`;
+  const fig = (id, inner = "", before = "") => `<figure class="blueprint">${corners}${before}<div class="chart" id="${id}"></div>${inner}</figure>`;
+  const basisLabel = (k) => CONFIG.rankBases[k].label;
 
   function buildPanels() {
     const D = state.D;
     const o = state.o;
     const tp = D.periods.filter((p) => CONFIG.taylorPeriods.includes(p));
-    const html = {
-      overview: `<div id="ov-body"></div>`,
-      portrait: `
-        <div class="controls">
-          ${ctl("기간", `<select data-o="portrait.period">${opts(D.periods, o.portrait.period, Fmt.period)}</select>`)}
-          ${ctl("모델 순서", `<select data-o="portrait.order">${opts(["name", "rank"], o.portrait.order, (v) => (v === "name" ? "자료 순서 (이름)" : "선택 기간 종합 순위"))}</select>`)}
-        </div>
+    const panels = {
+      overview: { controls: "", body: `<div id="ov-body" class="stack"></div>` },
+      portrait: {
+        controls: `
+          ${seg("portrait.period", D.periods, o.portrait.period)}
+          ${ctl("모델 순서", `<select data-o="portrait.order">${opts(["name", "rank"], o.portrait.order, (v) => (v === "name" ? "자료 순서 (이름)" : "선택 기간 종합 순위"))}</select>`)}`,
+        body: `
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-portrait"></div></div>
-          <aside class="note">
-            <h3>읽는 법</h3>
-            <p><b>NRMSE</b> = RMSE ÷ 표준편차 → 0에 가까울수록 ERA5와 가까움.</p>
-            <p>색이 진할수록 NRMSE가 큽니다(나쁨). 칸 안 숫자는 소수 둘째 자리이며, 마우스를 올리면 JSON 값이 그대로 보입니다.</p>
-            <div id="portrait-ref"></div>
+          ${fig("ch-portrait", "", `<div class="fig-title" id="portrait-title"></div>`)}
+          <aside>
+            <div class="card">
+              <div class="card-title">읽는 법</div>
+              <p><b>NRMSE</b> = RMSE ÷ 표준편차 → 0에 가까울수록 ERA5와 가까움.</p>
+              <p class="muted-p">색이 진할수록 NRMSE가 큽니다(나쁨). 칸 안 숫자는 소수 둘째 자리이며, 마우스를 올리면 JSON 값이 그대로 보입니다.</p>
+            </div>
+            <div class="card" id="portrait-ref"></div>
           </aside>
         </div>`,
-      taylor: `
-        <div class="controls">
-          ${ctl("기간", tp.length ? `<select data-o="taylor.period">${opts(tp, o.taylor.period, Fmt.period)}</select>` : `<span class="muted">그릴 기간 없음</span>`)}
-          ${ctl("통계량", `<select data-o="taylor.stat">${opts(D.stats, o.taylor.stat, Fmt.stat)}</select>`)}
-        </div>
+      },
+      taylor: {
+        controls: `
+          ${tp.length ? seg("taylor.period", tp, o.taylor.period) : `<span class="muted">그릴 기간 없음</span>`}
+          ${ctl("통계량", `<select data-o="taylor.stat">${opts(D.stats, o.taylor.stat, Fmt.stat)}</select>`)}`,
+        body: `
         <div id="taylor-count" class="countline"></div>
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-taylor"></div><div id="taylor-legend" class="model-legend"></div></div>
-          <aside class="note">
-            <h3>읽는 법</h3>
-            <p>★ ERA5에 가까울수록 좋습니다. 원점에서의 거리 = <b>표준편차비</b>(모델 ÷ ERA5, 1이면 공간 변동 크기 일치), 각도 = <b>상관계수</b>(면적가중 공간 상관), 점선 호 = ERA5 표준편차로 나눈 <b>centred RMSE</b>(평균 편의를 뺀 RMSE).</p>
+          ${fig("ch-taylor", `<div id="taylor-legend" class="model-legend"></div>`)}
+          <aside>
+            <div class="card">
+              <div class="card-title">읽는 법</div>
+              <p>★ ERA5에 가까울수록 좋습니다. 원점에서의 거리 = <b>표준편차비</b>(모델 ÷ ERA5, 1이면 공간 변동 크기 일치), 각도 = <b>상관계수</b>(면적가중 공간 상관), 점선 호 = ERA5 표준편차로 나눈 <b>centred RMSE</b>(평균 편의를 뺀 RMSE).</p>
+            </div>
             <div id="taylor-hidden"></div>
           </aside>
         </div>
-        <details class="table-wrap"><summary>값 표 보기</summary><div id="taylor-table"></div></details>`,
-      rank: `
-        <div class="controls">
-          ${ctl("기간", `<select data-o="rank.period">${opts(D.periods, o.rank.period, Fmt.period)}</select>`)}
-          ${ctl("기준", `<select data-o="rank.basis">${opts(Object.keys(CONFIG.rankBases), o.rank.basis, (k) => CONFIG.rankBases[k].label)}</select>`)}
-        </div>
+        <details class="card"><summary>값 표 보기</summary><div id="taylor-table"></div></details>`,
+      },
+      rank: {
+        controls: `
+          ${seg("rank.period", D.periods, o.rank.period)}
+          ${seg("rank.basis", Object.keys(CONFIG.rankBases), o.rank.basis, basisLabel)}`,
+        body: `
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-rank"></div></div>
-          <aside class="note" id="rank-note"></aside>
+          ${fig("ch-rank")}
+          <aside><div class="card" id="rank-note"></div></aside>
         </div>
-        <div class="table-wrap"><h3>순위 표 <span class="muted">(머리글을 누르면 정렬)</span></h3><div id="rank-table"></div></div>`,
-      meanext: `
-        <div class="controls">${ctl("기간", `<select data-o="meanext.period">${opts(D.periods, o.meanext.period, Fmt.period)}</select>`)}</div>
+        <div class="card"><div class="card-title">순위 표 <span class="muted">(머리글을 누르면 정렬)</span></div><div id="rank-table"></div></div>`,
+      },
+      meanext: {
+        controls: seg("meanext.period", D.periods, o.meanext.period),
+        body: `
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-meanext"></div></div>
-          <aside class="note">
-            <div id="meanext-stat" class="statbox"></div>
-            <h3>읽는 법</h3>
-            <ul>
-              <li><b>가로축</b>: 평균장(mean) NRMSE</li>
-              <li><b>세로축</b>: 극값장 NRMSE — p5·p1·min NRMSE의 산술평균</li>
-              <li><b>점의 위치</b>: 왼쪽 아래에 가까울수록 두 성능이 모두 우수</li>
-              <li><b>점선(1:1)</b>: 두 NRMSE가 같은 지점. 선 위는 극값장 오차가, 선 아래는 평균장 오차가 더 큼</li>
-            </ul>
-            <h3>Spearman ρ · 성능 순위의 연관성</h3>
-            <ul>
-              <li><b>1에 가까울수록</b>: 평균장 성능이 좋은 모델은 극값장 성능도 좋은 경향</li>
-              <li><b>0에 가까울수록</b>: 평균장 성능만으로 극값장 성능을 판단하기 어려움</li>
-              <li><b>−1에 가까울수록</b>: 평균장 성능이 좋은 모델은 극값장 성능이 낮은 경향</li>
-            </ul>
+          ${fig("ch-meanext")}
+          <aside>
+            <div class="blueprint statbox">${corners}<div id="meanext-stat"></div></div>
+            <div class="card">
+              <div class="card-title">읽는 법</div>
+              <ul>
+                <li><b>가로축</b>: 평균장(mean) NRMSE</li>
+                <li><b>세로축</b>: 극값장 NRMSE — p5·p1·min NRMSE의 산술평균</li>
+                <li><b>점의 위치</b>: 왼쪽 아래에 가까울수록 두 성능이 모두 우수</li>
+                <li><b>점선(1:1)</b>: 두 NRMSE가 같은 지점. 선 위는 극값장 오차가, 선 아래는 평균장 오차가 더 큼</li>
+              </ul>
+              <div class="card-title" style="margin-top:8px">Spearman ρ · 성능 순위의 연관성</div>
+              <ul>
+                <li><b>1에 가까울수록</b>: 평균장 성능이 좋은 모델은 극값장 성능도 좋은 경향</li>
+                <li><b>0에 가까울수록</b>: 평균장 성능만으로 극값장 성능을 판단하기 어려움</li>
+                <li><b>−1에 가까울수록</b>: 평균장 성능이 좋은 모델은 극값장 성능이 낮은 경향</li>
+              </ul>
+            </div>
           </aside>
         </div>`,
-      rankchange: `
-        <div class="controls">${ctl("순위 기준", `<select data-o="rankchange.basis">${opts(Object.keys(CONFIG.rankBases), o.rankchange.basis, (k) => CONFIG.rankBases[k].label)}</select>`)}</div>
+      },
+      rankchange: {
+        controls: seg("rankchange.basis", Object.keys(CONFIG.rankBases), o.rankchange.basis, basisLabel),
+        body: `
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-rankchange"></div></div>
-          <aside class="note">
-            <h3>읽는 법</h3>
+          ${fig("ch-rankchange")}
+          <aside class="card">
+            <div class="card-title">읽는 법</div>
             <p>각 선이 한 모델입니다. 위로 갈수록 순위가 높습니다(1 = 최상). 모델을 고르면 그 선이 강조되고 순위가 표시됩니다. 여러 모델을 함께 고를 수 있습니다.</p>
-            <p>기간마다 NRMSE 분모가 달라 값이 아니라 <b>순위</b>만 비교합니다.</p>
+            <p class="muted-p">기간마다 NRMSE 분모가 달라 값이 아니라 <b>순위</b>만 비교합니다.</p>
             <div id="rankchange-stat"></div>
           </aside>
         </div>`,
-      bias: `
-        <div class="controls">
-          ${ctl("기간", `<select data-o="bias.period">${opts(D.periods, o.bias.period, Fmt.period)}</select>`)}
+      },
+      bias: {
+        controls: `
+          ${seg("bias.period", D.periods, o.bias.period)}
           ${ctl("통계량", `<select data-o="bias.stat">${opts(D.stats, o.bias.stat, Fmt.stat)}</select>`)}
-          ${ctl("정렬", `<select data-o="bias.sort">${opts(["name", "value"], o.bias.sort, (v) => (v === "name" ? "자료 순서" : "편의 크기"))}</select>`)}
-        </div>
+          ${ctl("정렬", `<select data-o="bias.sort">${opts(["name", "value"], o.bias.sort, (v) => (v === "name" ? "자료 순서" : "편의 크기"))}</select>`)}`,
+        body: `
         <div id="bias-count" class="countline"></div>
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-bias"></div></div>
-          <aside class="note">
-            <h3>읽는 법</h3>
-            <p><b>편의</b> = 면적가중 평균(모델 − ERA5). 양수(빨강)는 모델 기압이 높고, 음수(파랑)는 낮습니다. 막대 끝 숫자는 소수 둘째 자리이며, 마우스를 올리면 JSON 값과 RMSE가 보입니다.</p>
-            <p>편의 값이 JSON에 없는 모델은 막대 없이 <b>자료 없음</b>으로 표시합니다. 0이 아닙니다.</p>
+          ${fig("ch-bias")}
+          <aside class="card">
+            <div class="card-title">읽는 법</div>
+            <p><b>편의</b> = 면적가중 평균(모델 − ERA5). 양수(<span style="color:var(--div-pos);font-weight:600">주황</span>)는 모델 기압이 높고, 음수(<span style="color:var(--div-neg);font-weight:600">파랑</span>)는 낮습니다. 막대 끝 숫자는 소수 둘째 자리이며, 마우스를 올리면 JSON 값과 RMSE가 보입니다.</p>
+            <p class="muted-p">편의 값이 JSON에 없는 모델은 막대 없이 <b>자료 없음</b>으로 표시합니다. 0이 아닙니다.</p>
             <div id="bias-med"></div>
           </aside>
         </div>`,
-      resolution: `
-        <div class="controls">
-          ${ctl("기간", `<select data-o="resolution.period">${opts(D.periods, o.resolution.period, Fmt.period)}</select>`)}
+      },
+      resolution: {
+        controls: `
+          ${seg("resolution.period", D.periods, o.resolution.period)}
           ${ctl("가로축", `<select data-o="resolution.x">${opts(["mean", "lon", "lat"], o.resolution.x, (v) => ({ mean: "경도·위도 평균", lon: "경도 간격", lat: "위도 간격" })[v])}</select>`)}
           ${ctl("세로축", `<select data-o="resolution.y">${resYOptions()
             .map(([v, l]) => `<option value="${v}"${v === o.resolution.y ? " selected" : ""}>${esc(l)}</option>`)
             .join("")}</select>`)}
-          <label class="ctl check"><input type="checkbox" data-o="resolution.family"${o.resolution.family ? " checked" : ""}> <span>같은 기관 모델 잇기</span></label>
-        </div>
+          <label class="ctl check"><input type="checkbox" data-o="resolution.family"${o.resolution.family ? " checked" : ""}> <span>같은 기관 모델 잇기</span></label>`,
+        body: `
         <div class="layout-2">
-          <div class="chart-card"><div class="chart" id="ch-resolution"></div></div>
-          <aside class="note warn">
-            <h3>⚠ 해석 주의</h3>
+          ${fig("ch-resolution")}
+          <aside class="warn-box">
+            <div class="card-title">⚠ 해석 주의</div>
             <ul>
               <li><b>참고용 탐색 그림</b>이며 인과관계를 뜻하지 않습니다.</li>
               <li>모든 모델을 약 1.9° 공통 격자(19×26)로 옮겨 비교했으므로 <b>해상도 효과가 가려졌을 수 있습니다</b>.${
-                D.meta.region?.common_grid ? ` <span class="muted small">(JSON: ${esc(D.meta.region.common_grid)})</span>` : ""
+                D.meta.region?.common_grid ? ` <span class="small" style="opacity:.8">(JSON: ${esc(D.meta.region.common_grid)})</span>` : ""
               }</li>
               <li>같은 기관의 형제 모델(EC-Earth3 계열 등)은 <b>서로 독립적이지 않습니다</b>. 점선은 같은 institution_id를 잇습니다.</li>
             </ul>
-            <p class="muted">격자 간격은 모델 원래 격자의 값입니다. 같은 간격의 모델은 점이 겹칠 수 있으니 아래 표를 함께 보세요.</p>
+            <p style="margin:4px 0 0;opacity:.85">격자 간격은 모델 원래 격자의 값입니다. 같은 간격의 모델은 점이 겹칠 수 있으니 아래 표를 함께 보세요.</p>
           </aside>
         </div>
-        <details class="table-wrap"><summary>값 표 보기</summary><div id="resolution-table"></div></details>`,
+        <details class="card"><summary>값 표 보기</summary><div id="resolution-table"></div></details>`,
+      },
     };
     $("#panels").innerHTML = CONFIG.tabs
-      .map((t) => `<section class="panel" id="panel-${t.id}" role="tabpanel" aria-labelledby="tab-${t.id}" hidden><h2>${esc(t.label)}</h2>${html[t.id]}</section>`)
+      .map(
+        (t) => `<section class="panel" id="panel-${t.id}" role="tabpanel" aria-labelledby="tab-${t.id}" hidden>
+          <div class="panel-head"><h2>${esc(t.label)}</h2><div class="controls">${panels[t.id].controls}</div></div>
+          ${panels[t.id].body}</section>`
+      )
       .join("");
     $("#panels").querySelectorAll("[data-o]").forEach((el) =>
       el.addEventListener("change", () => {
@@ -432,43 +466,62 @@ const App = (() => {
     const dl = (rows) => `<dl class="meta">${rows.filter(([, v]) => v !== undefined && v !== null && v !== "").map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
     const lonTxt = Array.isArray(r.lon) ? `${r.lon[0]}–${r.lon[1]}°E` : "";
     const latTxt = Array.isArray(r.lat) ? `${r.lat[0]}–${r.lat[1]}°N` : "";
+    // 다시 그릴 때 접어 둔 카드는 접힌 채로 둔다
+    const wasOpen = (k) => {
+      const el = document.querySelector(`#ov-body details[data-k="${k}"]`);
+      return el ? el.open : true;
+    };
+    const openSet = wasOpen("settings"),
+      openGloss = wasOpen("glossary");
+    const kv = (obj) => (obj ? Object.entries(obj).map(([k, v]) => `<b>${esc(k)}</b>: ${esc(v)}`).join("<br>") : "");
     $("#ov-body").innerHTML = `
-      <div class="ov">
+      <div class="ov-grid">
+        <div class="card lead-card">
           <p class="lead">CMIP6 전지구 기후모델(GCM) ${D.models.length}개의 북서태평양 ${esc(CONFIG.varNames[D.varName] ?? D.varLong)}(${esc(D.varName)}) 재현 성능을 ERA5 재분석 자료와 비교해 평가했습니다.</p>
-          <p class="lead">기간과 통계량에 따라 공간 오차(NRMSE), 상관계수, 표준편차비, 편의 및 모델 순위를 확인할 수 있습니다.</p>
-          <p class="lead">평가 영역: ${esc(CONFIG.overview.region ?? `${latTxt}, ${lonTxt}`)}</p>
-          <div class="chart-card"><div class="chart" id="ch-map"></div></div>
-          <p class="muted small">상자는 평가 영역입니다. 해안선: Natural Earth 1:50m.</p>
+          <p class="lead2">기간과 통계량에 따라 공간 오차(NRMSE), 상관계수, 표준편차비, 편의 및 모델 순위를 확인할 수 있습니다.</p>
+          <div class="facts">
+            <div><span>평가 영역</span><strong>${esc(CONFIG.overview.region ?? `${latTxt}, ${lonTxt}`)}</strong></div>
+            <div><span>모델</span><strong>${D.models.length}개</strong></div>
+            <div><span>기준 자료</span><strong>${esc(CONFIG.overview.reference ?? M.reference)}</strong></div>
+          </div>
+        </div>
+        <figure class="blueprint">${corners}<div class="chart" id="ch-map"></div><figcaption>상자는 평가 영역입니다. 해안선: Natural Earth 1:50m.</figcaption></figure>
       </div>
-      <h3>분석 설정</h3>
-      ${dl([
-        ["제목", esc(M.title)],
-        ["변수", esc(`${D.varName} [${D.units}]`)],
-        ["기준 자료", esc(CONFIG.overview.reference ?? M.reference)],
-        ["실험", esc(M.experiment)],
-        ["기간", esc(M.period)],
-        ["영역", esc(CONFIG.overview.region ?? `${lonTxt}, ${latTxt}`)],
-        ["공통 격자", esc(CONFIG.overview.commonGrid ?? r.common_grid)],
-        ["가중치", esc(r.weights)],
-        ["품질 관리", esc(M.qc)],
-        ["모델 선정", esc(M.model_selection)],
-        ["구분 기간", M.periods ? Object.entries(M.periods).map(([k, v]) => `<b>${esc(k)}</b>: ${esc(v)}`).join("<br>") : ""],
-        ["통계량", M.stats ? Object.entries(M.stats).map(([k, v]) => `<b>${esc(k)}</b>: ${esc(v)}`).join("<br>") : ""],
-        ["지표", M.metrics ? Object.entries(M.metrics).map(([k, v]) => `<b>${esc(k)}</b>: ${esc(v)}`).join("<br>") : ""],
-        ["순위", M.ranking ? Object.entries(M.ranking).map(([k, v]) => `<b>${esc(k)}</b>: ${esc(v)}`).join("<br>") : ""],
-        ["주의", Array.isArray(M.notes) ? M.notes.map(esc).join("<br>") : ""],
-      ])}
-      <h3>지표 읽는 법</h3>
-      <ul class="glossary">
-        <li><b>NRMSE</b>: RMSE를 ERA5 공간 표준편차로 나눈 값. 작을수록 좋음. 기간·통계량마다 분모가 다르므로 다른 기간끼리 값을 비교하지 않습니다.</li>
-        <li><b>상관계수</b>: 면적가중 공간 상관. 1에 가까울수록 공간 분포 모양이 ERA5와 같습니다.</li>
-        <li><b>표준편차비</b>: 모델 공간 표준편차 ÷ ERA5 공간 표준편차. 1이면 공간 변동 크기가 같습니다.</li>
-        <li><b>centred RMSE</b>: 영역 평균 차이(편의)를 뺀 뒤의 RMSE. 공간 패턴 오차만 봅니다.</li>
-        <li><b>편의</b>: 면적가중 평균(모델 − ERA5) [${esc(D.units)}].</li>
-        <li><b>통계량</b>: 각 격자점의 일자료로 구한 평균(mean), 5·1 백분위(p5, p1), 최솟값(min). 극값장 = p5·p1·min.</li>
-      </ul>
-      <h3>모델 정보 <span class="muted">(행을 누르면 강조)</span></h3>
-      <div class="table-scroll">${modelTable()}</div>`;
+      <div class="ov-grid">
+        <details class="card plain" data-k="settings"${openSet ? " open" : ""}><summary>분석 설정</summary>
+        ${dl([
+          ["제목", esc(M.title)],
+          ["변수", esc(`${D.varName} [${D.units}]`)],
+          ["기준 자료", esc(CONFIG.overview.reference ?? M.reference)],
+          ["실험", esc(M.experiment)],
+          ["기간", esc(M.period)],
+          ["영역", esc(CONFIG.overview.region ?? `${lonTxt}, ${latTxt}`)],
+          ["공통 격자", esc(CONFIG.overview.commonGrid ?? r.common_grid)],
+          ["가중치", esc(r.weights)],
+          ["품질 관리", esc(M.qc)],
+          ["모델 선정", esc(M.model_selection)],
+          ["구분 기간", kv(M.periods)],
+          ["통계량", kv(M.stats)],
+          ["지표", kv(M.metrics)],
+          ["순위", kv(M.ranking)],
+          ["주의", Array.isArray(M.notes) ? M.notes.map(esc).join("<br>") : ""],
+        ])}
+        </details>
+        <details class="card plain" data-k="glossary"${openGloss ? " open" : ""}><summary>지표 읽는 법</summary>
+          <ul class="glossary">
+            <li><b>NRMSE</b><span> — RMSE를 ERA5 공간 표준편차로 나눈 값. 작을수록 좋음. 기간·통계량마다 분모가 다르므로 다른 기간끼리 값을 비교하지 않습니다.</span></li>
+            <li><b>상관계수</b><span> — 면적가중 공간 상관. 1에 가까울수록 공간 분포 모양이 ERA5와 같습니다.</span></li>
+            <li><b>표준편차비</b><span> — 모델 공간 표준편차 ÷ ERA5 공간 표준편차. 1이면 공간 변동 크기가 같습니다.</span></li>
+            <li><b>centred RMSE</b><span> — 영역 평균 차이(편의)를 뺀 뒤의 RMSE. 공간 패턴 오차만 봅니다.</span></li>
+            <li><b>편의</b><span> — 면적가중 평균(모델 − ERA5) [${esc(D.units)}].</span></li>
+            <li><b>통계량</b><span> — 각 격자점의 일자료로 구한 평균(mean), 5·1 백분위(p5, p1), 최솟값(min). 극값장 = p5·p1·min.</span></li>
+          </ul>
+        </details>
+      </div>
+      <div class="card">
+        <div class="card-title">모델 정보 <span class="muted">(행을 누르면 강조)</span></div>
+        <div class="table-scroll">${modelTable()}</div>
+      </div>`;
     Charts.regionMap($("#ch-map"), D);
   }
 
@@ -478,8 +531,8 @@ const App = (() => {
       .map((m) => {
         const r = m.resolution_deg || {},
           g = m.grid_points || {};
-        return `<tr data-model="${esc(m.id)}" tabindex="0" class="${isSel(m.id) ? "sel" : ""}">
-          <td><b>${esc(m.id)}</b></td>
+        return `<tr ${rowAttr(m.id)}>
+          <td><span class="model-cell">${dot(m.id)}${esc(m.id)}</span></td>
           <td title="${esc(m.institution)}">${esc(m.institution_id)}<div class="small muted">${esc(m.institution)}</div></td>
           <td>${esc(m.country)}</td>
           <td class="num">${g.lon ?? Fmt.NA} × ${g.lat ?? Fmt.NA}</td>
@@ -491,7 +544,7 @@ const App = (() => {
         </tr>`;
       })
       .join("");
-    return `<table class="data"><thead><tr><th>모델</th><th>기관</th><th>국가</th><th>격자 수 (경도×위도)</th><th>격자 간격 (경도×위도)</th><th>공칭 해상도</th><th>격자</th><th>달력</th><th>변이</th></tr></thead><tbody>${rows}</tbody></table>`;
+    return `<table class="data" style="min-width:880px"><thead><tr><th>모델</th><th>기관</th><th>국가</th><th class="num">격자 수 (경도×위도)</th><th class="num">격자 간격 (경도×위도)</th><th>공칭 해상도</th><th>격자</th><th>달력</th><th>변이</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
 
   function portrait() {
@@ -500,8 +553,9 @@ const App = (() => {
     let order = D.modelIds.slice();
     if (o.order === "rank") order.sort((a, b) => (D.rank(o.period, a, "overall_rank") ?? 1e9) - (D.rank(o.period, b, "overall_rank") ?? 1e9));
     Charts.portrait($("#ch-portrait"), D, selection(), { period: o.period, order }, toggleModel);
-    const rs = D.stats.map((s) => `<tr><td>${esc(Fmt.stat(s))}</td><td class="num">${Fmt.raw(D.refSd(o.period, s))}</td></tr>`).join("");
-    $("#portrait-ref").innerHTML = `<h3>ERA5 공간 표준편차 (NRMSE 분모, ${esc(D.units)})</h3><table class="data compact"><tbody>${rs}</tbody></table>`;
+    $("#portrait-title").textContent = `NRMSE · ${Fmt.period(o.period)}`;
+    const rs = D.stats.map((s) => `<div><span>${esc(Fmt.stat(s))}</span><strong>${Fmt.raw(D.refSd(o.period, s))}</strong></div>`).join("");
+    $("#portrait-ref").innerHTML = `<div class="card-title">ERA5 공간 표준편차 <small class="muted">NRMSE 분모, ${esc(D.units)}</small></div><div class="ref-sd">${rs}</div>`;
   }
 
   function taylor() {
@@ -521,6 +575,7 @@ const App = (() => {
       } · ${esc(Fmt.period(o.period))} · ${esc(Fmt.stat(o.stat))}` +
       (missing.length ? `<br><span class="muted">자료 없음: ${missing.map(esc).join(", ")}</span>` : "");
     const colors = Charts.modelColors(D);
+    $("#taylor-legend").classList.toggle("has-sel", state.sel.length > 0);
     $("#taylor-legend").innerHTML = D.modelIds
       .map((m) => {
         const has = pts.some((q) => q.m === m);
@@ -530,27 +585,28 @@ const App = (() => {
       .join("");
     const hidden = pts.filter((q) => q.src === "digitized_hidden");
     $("#taylor-hidden").innerHTML = hidden.length
-      ? `<div class="callout warn"><b>⚠ 실제 위치가 아닌 점</b><br>${hidden
+      ? `<div class="warn-box"><b>⚠ 실제 위치가 아닌 점</b>${hidden
           .map(
             (q) =>
               `${esc(q.m)}: 그림에서 다른 마커에 완전히 가려져, 그 위를 덮은 마커의 위치를 대신 사용했습니다.${
                 q.twins.length ? ` 상관계수·표준편차비가 ${q.twins.map(esc).join(", ")}과(와) 같습니다.` : ""
               }`
           )
-          .join("<br>")}</div>`
+          .map((t) => `<span>${t}</span>`)
+          .join("")}</div>`
       : "";
     const rows = D.modelIds
       .map((m) => {
         const q = pts.find((x) => x.m === m);
         const ob = D.metricObj(o.period, o.stat, m) || {};
-        return `<tr data-model="${esc(m)}" tabindex="0" class="${isSel(m) ? "sel" : ""}"><td>${esc(m)}</td>
+        return `<tr ${rowAttr(m)}><td><span class="model-cell">${dot(m)}${esc(m)}</span></td>
           <td class="num">${Fmt.raw(Data.num(ob.corr))}</td><td class="num">${Fmt.raw(Data.num(ob.sd_ratio))}</td>
           <td class="num">${q && q.crmse !== null ? (q.crmseComputed ? q.crmse.toFixed(3) + " (계산값)" : String(q.crmse)) : Fmt.NA}</td>
           <td class="num">${Fmt.raw(Data.num(ob.sd_mod))}</td></tr>`;
       })
       .join("");
-    $("#taylor-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>상관계수</th><th>표준편차비</th><th>centred RMSE [${esc(D.units)}]</th><th>모델 표준편차 [${esc(D.units)}]</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="muted small">ERA5 공간 표준편차 = ${Fmt.raw(D.refSd(o.period, o.stat))} ${esc(D.units)}</p>`;
+    $("#taylor-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th class="num">상관계수</th><th class="num">표준편차비</th><th class="num">centred RMSE [${esc(D.units)}]</th><th class="num">모델 표준편차 [${esc(D.units)}]</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="table-note">ERA5 공간 표준편차 = ${Fmt.raw(D.refSd(o.period, o.stat))} ${esc(D.units)}</p>`;
   }
 
   function rank() {
@@ -558,7 +614,7 @@ const App = (() => {
       o = state.o.rank;
     Charts.rankBars($("#ch-rank"), D, selection(), o, toggleModel);
     const R = D.meta.ranking || {};
-    $("#rank-note").innerHTML = `<h3>순위 기준</h3>
+    $("#rank-note").innerHTML = `<div class="card-title">순위 기준</div>
       <ul>
         <li><b>평균장</b>: mean NRMSE 순위. <span class="muted">${esc(R.mean ?? "")}</span></li>
         <li><b>극값장</b>: p5·p1·min NRMSE 산술평균의 순위. <span class="muted">${esc(R.ext ?? "")}</span></li>
@@ -598,22 +654,22 @@ const App = (() => {
     const head = cols
       .map(([k, l]) => {
         const s = o.sortKey === k ? (o.sortDir > 0 ? " ▲" : " ▼") : "";
-        return `<th><button class="sort" data-sort="${k}" aria-sort="${o.sortKey === k ? (o.sortDir > 0 ? "ascending" : "descending") : "none"}">${l}${s}</button></th>`;
+        return `<th class="${k === "model" ? "" : "num"}"><button class="sort" data-sort="${k}" aria-sort="${o.sortKey === k ? (o.sortDir > 0 ? "ascending" : "descending") : "none"}">${l}${s}</button></th>`;
       })
       .join("");
     const body = ms
       .map(
         (m) =>
-          `<tr data-model="${esc(m)}" tabindex="0" class="${isSel(m) ? "sel" : ""}">${cols
+          `<tr ${rowAttr(m)}>${cols
             .map(([k]) => {
               const v = val(m, k);
-              return k === "model" ? `<td><b>${esc(m)}</b></td>` : `<td class="num">${Fmt.raw(v)}</td>`;
+              return k === "model" ? `<td><span class="model-cell">${dot(m)}${esc(m)}</span></td>` : `<td class="num">${Fmt.raw(v)}</td>`;
             })
             .join("")}</tr>`
       )
       .join("");
-    $("#rank-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>
-      <p class="muted small">${esc(Fmt.period(o.period))} 기준. NRMSE와 순위는 JSON 값 그대로입니다. 같은 값은 같은 순위(낮은 쪽)를 가집니다.</p>`;
+    $("#rank-table").innerHTML = `<div class="table-scroll"><table class="data" style="min-width:820px"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>
+      <p class="table-note">${esc(Fmt.period(o.period))} 기준. NRMSE와 순위는 JSON 값 그대로입니다. 같은 값은 같은 순위(낮은 쪽)를 가집니다.</p>`;
     $("#rank-table")
       .querySelectorAll("button.sort")
       .forEach((b) =>
@@ -657,7 +713,7 @@ const App = (() => {
       })
       .join("");
     $("#rankchange-stat").innerHTML = rows
-      ? `<h3>Entire 순위와의 Spearman ρ</h3><table class="data compact"><thead><tr><th>기간</th><th>평균장</th><th>극값장</th></tr></thead><tbody>${rows}</tbody></table><p class="muted small">JSON summary 값.</p>`
+      ? `<div class="card-title" style="margin-top:10px">Entire 순위와의 Spearman ρ</div><table class="data compact"><thead><tr><th>기간</th><th class="num">평균장</th><th class="num">극값장</th></tr></thead><tbody>${rows}</tbody></table><p class="table-note">JSON summary 값.</p>`
       : "";
   }
 
@@ -671,7 +727,7 @@ const App = (() => {
     $("#bias-med").innerHTML =
       r.med === null
         ? ""
-        : `<p>세로 점선은 JSON <code>summary.${esc(o.period)}.median.${esc(o.stat)}.bias</code> 값(${r.med} ${esc(D.units)})입니다. 어떤 모델 집합의 중앙값인지는 JSON에 적혀 있지 않습니다.</p>`;
+        : `<p class="muted-p">세로 점선은 JSON <code>summary.${esc(o.period)}.median.${esc(o.stat)}.bias</code> 값(${r.med} ${esc(D.units)})입니다. 어떤 모델 집합의 중앙값인지는 JSON에 적혀 있지 않습니다.</p>`;
   }
 
   function resolution() {
@@ -683,9 +739,9 @@ const App = (() => {
     const body = rows
       .slice()
       .sort((a, b) => a.x - b.x || a.m.localeCompare(b.m))
-      .map((r) => `<tr data-model="${esc(r.m)}" tabindex="0" class="${isSel(r.m) ? "sel" : ""}"><td>${esc(r.m)}</td><td>${esc(r.inst)}</td><td class="num">${+r.x.toFixed(4)}</td><td class="num">${Fmt.raw(r.y)}</td></tr>`)
+      .map((r) => `<tr ${rowAttr(r.m)}><td><span class="model-cell">${dot(r.m)}${esc(r.m)}</span></td><td>${esc(r.inst)}</td><td class="num">${+r.x.toFixed(4)}</td><td class="num">${Fmt.raw(r.y)}</td></tr>`)
       .join("");
-    $("#resolution-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>기관</th><th>${xName} (°)</th><th>${esc(yLabel)}</th></tr></thead><tbody>${body}</tbody></table></div>`;
+    $("#resolution-table").innerHTML = `<div class="table-scroll"><table class="data"><thead><tr><th>모델</th><th>기관</th><th class="num">${xName} (°)</th><th class="num">${esc(yLabel)}</th></tr></thead><tbody>${body}</tbody></table></div>`;
   }
 
   return { init };

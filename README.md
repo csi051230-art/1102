@@ -107,7 +107,7 @@ docs/                     GitHub Pages 배포 소스
   index.html, css/, js/   뷰어 (config.js 설정, data.js 자료 접근, charts.js 그림, app.js 화면)
   data/viewer_data.json   뷰어 자료 (이 파일만 바꾸면 갱신)
   data/datasets.json      변수 목록
-  vendor/                 Plotly.js 4.2.0, 해안선 topojson (외부 CDN 없이 동작)
+  vendor/                 Plotly.js 4.2.0, 해안선 topojson, Barlow 글꼴 (외부 CDN 없이 동작)
   .nojekyll
 tools/p9_viewer_data_from_transcript.py   임시 JSON을 만든 스크립트 (출처 기록용)
 view.bat                  로컬 미리보기
@@ -120,7 +120,13 @@ view.bat                  로컬 미리보기
 | Plotly.js | **4.2.0** 고정. npm `plotly.js-dist-min@4.2.0` (https://cdn.jsdelivr.net/npm/plotly.js-dist-min@4.2.0/plotly.min.js) | MIT (`docs/vendor/plotly-4.2.0/LICENSE`) |
 | 해안선 `world_50m.json` | Natural Earth 1:50m 기반 topojson. npm `plotly.js@2.35.3`의 `dist/topojson/world_50m.json` (https://cdn.jsdelivr.net/npm/plotly.js@2.35.3/dist/topojson/world_50m.json, sane-topojson으로 생성). Plotly 4.x 패키지에는 이 파일이 들어 있지 않아 2.35.3 배포본에서 가져왔습니다 | Natural Earth 자료: public domain / plotly.js·sane-topojson: MIT |
 
-두 파일은 2026-11-01에 받아 저장소에 포함했으며, 사이트는 외부 CDN을 부르지 않습니다.
+| 글꼴 Barlow (400·500·700), Barlow Condensed (400·600) | Google Fonts 배포본(fonts.gstatic.com)의 라틴 woff2, `docs/vendor/fonts/`. 원 프로젝트 https://github.com/jpt/barlow | SIL Open Font License 1.1 (`docs/vendor/fonts/OFL.txt`) |
+
+Plotly와 해안선 파일은 2026-11-01에, 글꼴은 2026-11-02에 받아 저장소에 포함했으며, 사이트는 외부 CDN을 부르지 않습니다.
+Barlow에는 한글이 없어 한글은 시스템 글꼴(맑은 고딕 등)로 표시됩니다.
+
+화면 디자인은 Claude Design의 Industry 디자인 시스템(철청색 강조, 각진 선 그림, "+" 모서리 표시) 시안을 옮긴 것입니다.
+디자인 원본 파일은 저장소에 넣지 않았습니다.
 
 ## 인용
 

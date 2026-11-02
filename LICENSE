@@ -9,6 +9,7 @@ This repository uses two licenses.
 - docs/vendor/plotly-4.2.0/ : Plotly.js 4.2.0, MIT License (docs/vendor/plotly-4.2.0/LICENSE)
 - docs/vendor/topojson/world_50m.json : Natural Earth 1:50m 자료 기반 (public domain),
   plotly.js 2.35.3 배포본(sane-topojson, MIT)에서 가져옴
+- docs/vendor/fonts/ : Barlow, Barlow Condensed 글꼴, SIL Open Font License 1.1 (docs/vendor/fonts/OFL.txt)
 
 -------------------------------------------------------------------------------
 
