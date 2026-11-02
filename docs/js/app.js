@@ -133,7 +133,7 @@ const App = (() => {
     fixP(state.o.bias);
     fixS(state.o.bias);
     const src = state.userFile ? `끌어다 놓은 파일: ${state.userFile}` : `기본 자료: ${D.sourceLabel}`;
-    setStatus(`${src} · 모델 ${D.models.length}개 · 생성일 ${D.meta.generated ?? "미표기"}`);
+    setStatus(`${src} · 모델 ${D.models.length}개`);
     $("#resetData").hidden = !state.userFile;
     fillModelSelect();
     buildPanels();
