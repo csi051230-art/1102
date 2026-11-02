@@ -141,8 +141,9 @@ const App = (() => {
   }
 
   /* ---------- 평가 영역 ---------- */
+  // 계산 영역: config.js의 computedRegion이 있으면 그것을, 없으면 JSON meta.region을 쓴다
   function computedRegion(D = state.base) {
-    const r = D?.meta?.region || {};
+    const r = CONFIG.computedRegion || D?.meta?.region || {};
     return Array.isArray(r.lat) && Array.isArray(r.lon) ? { lat: [r.lat[0], r.lat[1]], lon: [r.lon[0], r.lon[1]] } : null;
   }
   const regionText = (g) => `위도 ${g.lat[0]} ~ ${g.lat[1]} °N, 경도 ${g.lon[0]} ~ ${g.lon[1]} °E`;
@@ -635,7 +636,7 @@ const App = (() => {
           ["기준 자료", esc(CONFIG.overview.reference ?? M.reference)],
           ["실험", esc(M.experiment)],
           ["기간", esc(M.period)],
-          ["영역", esc(`${lonTxt}, ${latTxt}`)],
+          ["영역", (() => { const c = computedRegion(); return c ? esc(regionText(c)) : esc(`${lonTxt}, ${latTxt}`); })()],
           ["공통 격자", esc(CONFIG.overview.commonGrid ?? r.common_grid)],
           ["가중치", esc(r.weights)],
           ["품질 관리", esc(M.qc)],

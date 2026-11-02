@@ -12,6 +12,10 @@ const CONFIG = {
     commonGrid: "1.875°×1.25° = 494 points",
   },
 
+  // 계산 영역 (임시). 개요의 평가 영역 입력값이 이 값과 정확히 같을 때만 "계산된 영역"으로 본다.
+  // 실제 계산 영역(JSON meta.region: 20.625~51.875°N, 115.3125~149.0625°E)으로 돌리려면 null로 바꾸거나 값을 고친다.
+  computedRegion: { lat: [14, 54], lon: [114, 154] },
+
   // 개요 설명에 쓰는 변수의 한국어 이름. 없으면 JSON meta.variable.long_name을 쓴다.
   varNames: {
     psl: "해면기압",
